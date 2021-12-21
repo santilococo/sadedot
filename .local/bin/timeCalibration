@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# exec will take ownership of this program! So, this process will now be dwmblocks.
+# Therefore we must not kill it, because it is now dwmblocks! And its parent is obviously
+# dwm (because in startx we use exec to launch it!)
+restartDwmblocks() {
+    pkill dwmblocks
+    exec dwmblocks
+}
+
+# Wait for dwm to start
+sleep 5
+while true
+do
+    if [ `date "+%S"` -eq 55 ]; then
+	restartDwmblocks
+    fi
+
+    sleep 1
+done
+

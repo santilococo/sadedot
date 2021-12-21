@@ -1,0 +1,263 @@
+#!/bin/sh
+
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+alias lh='ls -lh'
+
+alias vim='nvim'
+alias svim='sudo nvim'
+
+alias ga='git add'
+alias gaa='git add .'
+alias gaaa='git add -A'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gd='git diff'
+alias gi='git init'
+alias gl='git log'
+alias gp='git pull'
+alias gpsh='git push'
+alias gss='git status -s'
+# Undo commit (https://stackoverflow.com/questions/2845731/how-to-uncommit-my-last-commit-in-git)
+alias gundo='git reset --soft HEAD^'
+
+alias exiftcl='exiftool -all='
+alias exift='exiftool'
+
+alias upgraded='grep -i upgraded /var/log/pacman.log | tac | less'
+alias installed='grep -i installed /var/log/pacman.log | tac | less'
+
+# https://archlinux.org/mirrorlist/
+alias mirrors='reflector --country Brazil,Chile,Colombia --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
+
+# https://stackoverflow.com/questions/9449778/what-is-the-benefit-of-using-instead-of-backticks-in-shell-scripts#
+alias open='xdg-open $(fzf)'
+alias o='xdg-open'
+
+alias zat='zathura --fork'
+
+alias trash-dir='cd $HOME/.local/share/Trash'
+
+#alias fd='cd "$(dirname "$(fzf)")"'
+
+alias val='valgrind --leak-check=full ./listdir prueba/ > valgrind.output 2>&1'
+
+alias pampero='ssh slococo@pampero.it.itba.edu.ar'
+
+alias bd='systemctl start postgresql.service'
+
+function compile() {
+    sudo make clean && sudo make install
+}
+
+function rcomp() {
+    local file="${1//.rmd/}"
+    R -e "rmarkdown::render('$file.rmd', 'pdf_document')" && op $file.pdf
+}
+
+function cl() {
+    nasm -f elf $1
+    local program="${1//.asm/}"
+    ld -melf_i386 $program.o -o $program
+    if [[ $# -ge 3 ]]; then
+        ./$program "${@:3}"
+    else
+        ./$program
+    fi
+}
+
+function cld() {
+    nasm -f elf $1 && nasm -f elf $2
+    local program="${1//.asm/}"
+    local library="${2//.asm/}"
+    ld -melf_i386 $program.o $library.o -o $program
+    if [[ $# -ge 3 ]]; then
+        ./$program "${@:3}"
+    else
+        ./$program
+    fi
+}
+
+function asc() {
+    nasm -f elf32 $1
+    gcc -c -m32 $2
+    local assem="${1//.asm/}"
+    local cprog="${2//.c/}"
+    gcc -m32 -no-pie $assem.o $cprog.o -o $assem
+    if [[ $# -ge 3 ]]; then
+        ./$assem "${@:3}"
+    else
+        ./$assem
+    fi
+}
+
+function ascn() {
+    nasm -f elf32 $1
+    local assem="${1//.asm/}"
+    gcc -m32 -no-pie $assem.o -o $assem
+    if [[ $# -ge 2 ]]; then
+        ./$assem "${@:2}"
+    else
+        ./$assem
+    fi
+}
+
+function ascld() {
+    nasm -f elf32 $1
+    gcc -c -m32 $2
+    local assem="${1//.asm/}"
+    local cprog="${2//.c/}"
+    ld -melf_i386 $assem.o $cprog.o -o $assem
+    if [[ $# -ge 3 ]]; then
+        ./$assem "${@:3}"
+    else
+        ./$assem
+    fi
+}
+
+function gci() {
+    echo "Copy after 'git@github.com:'"
+    git clone git@itba.github.com:$1
+}
+
+function gcir() {
+    echo "Copy after 'git@github.com:'"
+    git remote add origin git@itba.github.com:$1
+}
+
+function gcn() {
+    echo "Copy after 'git@github.com:'"
+    git clone git@github.com:$1
+}
+
+function gcin() {
+    echo "Copy after 'git@github.com:'"
+    git remote add origin git@github.com:$1
+}
+
+# Start an ssh-agent and run KeePass in order to cache the ssh passwords
+function gith() {
+    #eval $(ssh-agent)
+    keepass &
+    ~/.local/bin/waitForSSH &
+}
+
+# https://vsupalov.com/docker-shared-permissions/
+# https://medium.com/redbubble/running-a-docker-container-as-a-non-root-user-7d2e00f8ee15
+#alias dcom='docker run -v ${PWD}:/root -ti -w /root agodio/itba-so:1.0 ${1}'
+#alias dcom='docker run -v ${PWD}:/root --security-opt seccomp:unconfined -ti agodio/itba-so:1.0'
+alias dcom='docker run -v ${PWD}:/root --security-opt seccomp:unconfined --user $(id -u):$(id -g) -w /root -ti agodio/itba-so:1.0'
+#alias dcom='docker run -v ${PWD}:/root --security-opt seccomp:unconfined --user $(id -u):$(id -g) -w /root --name TPE-ARQUI -ti agodio/itba-so:1.0'
+
+alias dcr='checkIfStarted'
+
+function dcreate() {
+    echo "Do you want to create a container with root or user (as the owner)?"
+    chosen=$(echo "root\nuser" | dmenu)
+    echo "Enter a name for the container"
+    read name
+    if [ $chosen = "root" ]; then
+	docker run -v ${PWD}:/root --security-opt seccomp:unconfined -w /root --name $name -ti agodio/itba-so:1.0
+    else
+	docker run -v ${PWD}:/root --security-opt seccomp:unconfined --user $(id -u):$(id -g) -w /root --name $name -ti agodio/itba-so:1.0
+    fi
+}
+
+function checkIfStarted() {
+    if systemctl status docker | grep -q "inactive"; then
+	systemctl start docker
+    fi
+}
+
+# https://stackoverflow.com/a/61390489
+function docom() {
+    local dockerID=`docker ps -l -q`
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID $@
+    docker stop $dockerID > /dev/null
+}
+
+function dcrun() {
+    local dockerID=`docker ps -l -q`
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash -c 'make all 2>&1 1>/dev/null | grep --color -iP "\^|warning:|error:|"'
+    docker stop $dockerID > /dev/null
+    ./run.sh
+}
+
+function dcmake() {
+    local dockerID=`docker ps -l -q`
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash -c 'make all 2>&1 1>/dev/null | grep --color -iP "\^|warning:|error:|"'
+    docker stop $dockerID > /dev/null
+}
+
+function dcstacho() {
+    checkIfStarted
+    #echo `docker ps -a | awk '{ print $12 }'`
+    #read line
+    #if [ $line -eq 2 ]; then
+    #    local dockerID=`docker ps -a | awk 'NR==2 { print $12 }'`
+    #else
+    #    local dockerID=`docker ps -a | awk 'NR==3 { print $12 }'`
+    #fi
+    #local dockerID=$(docker ps -a | awk -F"\t" '{print $12}' | tail -n +2 | dmenu)
+    local dockerID=$(docker ps -a --format "{{.Names}}" | dmenu)
+    docker start $dockerID > /dev/null
+    #docker exec -it $dockerID bash -c 'make all 2>&1 1>/dev/null | grep --color -iP "\^|warning:|error:|"'
+    #docker stop $dockerID > /dev/null
+    #./run.sh
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash $@
+}
+
+function dcruntpe() {
+    checkIfStarted
+    local dockerID='TPE-ARQUI'
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash -c 'make all 2>&1 1>/dev/null | grep --color -iP "\^|warning:|error:|"'
+    docker stop $dockerID > /dev/null
+    ./run.sh
+}
+
+function dcgdbtpe() {
+    checkIfStarted
+    local dockerID='TPE-ARQUI-GDB'
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash -c 'make all 2>&1 1>/dev/null | grep --color -iP "\^|warning:|error:|"'
+    docker stop $dockerID > /dev/null
+    ./run.sh gdb
+}
+
+function dcstatpe() {
+    checkIfStarted
+    local dockerID='TPE-ARQUI-GDB'
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash $@
+}
+
+function dcstotpe() {
+    local dockerID='TPE-ARQUI-GDB'
+    docker stop $dockerID > /dev/null
+}
+
+function dcstatpe2() {
+    checkIfStarted
+    local dockerID='TPE-ARQUI'
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash $@
+}
+
+function dcsta() {
+    checkIfStarted
+    #local dockerID=`docker ps -l -q`
+    local dockerID=`docker ps -l`
+    docker start $dockerID > /dev/null
+    docker exec -it $dockerID bash $@
+}
+
+function dcsto() {
+    local dockerID=`docker ps -l -q`
+    docker stop $dockerID > /dev/null
+}
