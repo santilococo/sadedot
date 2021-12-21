@@ -20,9 +20,11 @@ getGitconfigData() {
 startRice() {
     dialog --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles. Make sure to backup your dotfiles!" 10 60
 
+    # getGitconfigData
+
     ./scripts/linkFiles.sh
 
-    getGitconfigData
+    # clear
 }
 
 startRice
