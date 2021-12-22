@@ -3,10 +3,13 @@
 [Fork][1] this repository and you will be able to backup all your dotfiles (and easily install them on another machine).
 
 ## Table of contents
-- [Installation <a name="installation"></a>](#installation-)
-- [Usage <a name="usage"></a>](#usage-)
-- [Contributing <a name="contributing"></a>](#contributing-)
-- [License <a name="license"></a>](#license-)
+- [CocoRice](#cocorice)
+  - [Table of contents](#table-of-contents)
+  - [Installation <a name="installation"></a>](#installation-)
+  - [Usage <a name="usage"></a>](#usage-)
+  - [Dependencies <a name="dependencies"></a>](#dependencies-)
+  - [Contributing <a name="contributing"></a>](#contributing-)
+  - [License <a name="license"></a>](#license-)
 
 ## Installation <a name="installation"></a>
 
@@ -17,10 +20,12 @@ Fork or clone this repo.
 Run
 
 ```bash
-sudo ./scripts/bootstrap.sh
+sh scripts/bootstrap.sh
 ```
 
-Note that because this script will create symbolic links to the dotfiles in this repository, you must not delete it.
+## Dependencies <a name="dependencies"></a>
+
+You must install dialog.
 
 ## Contributing <a name="contributing"></a>
 PRs are welcome.

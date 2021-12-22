@@ -23,14 +23,21 @@ getGitconfigData() {
 }
 
 checkForDependencies() {
-    unameOutput=$(uname -a | grep "arch")
-    if [ -f "/etc/arch-release" ] || [ $unameOutput -eq 0 ]; then
-        pacman --noconfirm --needed -Sy dialog > /dev/null 2>&1 || echo "You must run this script as root and have an active internet connection." >&2 || exit 1
-    fi
-
     commOuput=$(command -v dialog &> /dev/null)
     if [ $? -eq 1 ]; then
-        echo "You must install dialog." >&2 || exit 1
+        unameOutput=$(uname -a | grep "arch")
+        if [ -f "/etc/arch-release" ] || [ $unameOutput -eq 0 ]; then
+            sudo pacman --noconfirm --needed -Sy dialog > /dev/null 2>&1
+            if [ $? -eq 1 ]; then
+                echo "You must run this script as root and have an active internet connection." >&2
+                exit 1
+            fi
+
+            return
+        fi
+
+        echo "You must install dialog." >&2
+        exit 1
     fi
 }
 
@@ -43,8 +50,8 @@ startRice() {
 
     dialog --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles. Make sure to backup your dotfiles!" 10 60
     getGitconfigData
-    ./scripts/linkFiles.sh
-    # ./scripts/install.sh
+    sh scripts/linkFiles.sh
+    # sh scripts/install.sh
     dialog --title "CocoRice" --msgbox "All done! Enjoy..." 10 60
 
     clear

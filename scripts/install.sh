@@ -2,7 +2,7 @@
 
 makeInstall() {
     cd $1
-    make install
+    sudo make install
     cd ..
 }
 

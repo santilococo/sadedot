@@ -15,7 +15,8 @@ linkFile() {
             ln -s "$1" "$2"
         else
             selectedOption=$(dialog --menu "File already exists: $(basename "$1"), what would you like to do?" 10 60 0 1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all" 3>&1 1>&2 2>&3 3>&1)
-            if [ "$selectedOption" = "" ]; then
+            if [ $? -eq 1 ]; then
+            # if [ "$selectedOption" = "" ]; then
                 exit 0
             fi
 
@@ -44,9 +45,6 @@ linkFile() {
 }
 
 loopThroughFiles() {
-    # lastFolder=$(pwd -P)
-
-    # DOTFILES=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
     DOTFILES=$(pwd -P)
     cd $DOTFILES
 
@@ -82,8 +80,6 @@ loopThroughFiles() {
             fi
         done
     done
-
-    # cd $lastFolder
 }
 
 loopThroughFiles
