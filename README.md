@@ -1,6 +1,6 @@
 # CocoRice
 
-Install my dotfiles.
+[Fork][1] this repository and you will be able to backup all your dotfiles (and easily install them on another machine).
 
 ## Table of contents
 - [Installation <a name="installation"></a>](#installation-)
@@ -10,22 +10,22 @@ Install my dotfiles.
 
 ## Installation <a name="installation"></a>
 
-Clone the repo.
+Fork or clone this repo.
 
 ## Usage <a name="usage"></a>
 
 Run
 
 ```bash
-./scripts/bootstrap.sh
+sudo ./scripts/bootstrap.sh
 ```
 
-and it will create symbolic links to the dotfiles in this repo.
-
-Note that that this script will overwrite your local dotfiles, so make a backup first.
+Note that because this script will create symbolic links to the dotfiles in this repository, you must not delete it.
 
 ## Contributing <a name="contributing"></a>
 PRs are welcome.
 
 ## License <a name="license"></a>
 [MIT](https://choosealicense.com/licenses/mit/)
+
+[1]: https://github.com/santilococo/CocoRice/fork
