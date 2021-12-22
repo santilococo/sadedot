@@ -24,7 +24,7 @@ startRice() {
 
     ./scripts/linkFiles.sh
 
-    # clear
+    clear
 }
 
 startRice
