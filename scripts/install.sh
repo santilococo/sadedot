@@ -7,19 +7,19 @@ cd $DOTFILES_CONFIG
 downloaded=false
 
 if [[ ! -d "dwmblocks" ]]; then
-    git clone https://github.com/santilococo/dwmblocks.git
+    git clone --progress https://github.com/santilococo/dwmblocks.git 2>&1 | dialog --progressbox "Downloading dwmblocks" 10 60
     downloaded=true
 fi
 if [[ ! -d "dwm" ]]; then
-    git clone https://github.com/santilococo/dwm.git
+    git clone --progress https://github.com/santilococo/dwm.git 2>&1 | dialog --progressbox "Downloading dwm" 10 60
     downloaded=true
 fi
 if [[ ! -d "st" ]]; then
-    git clone https://github.com/santilococo/st.git
+    git clone --progress https://github.com/santilococo/st.git 2>&1 | dialog --progressbox "Downloading st" 10 60
     downloaded=true
 fi
 if [[ ! -d "dmenu" ]]; then
-    git clone https://github.com/santilococo/dmenu.git
+    git clone --progress https://github.com/santilococo/dmenu.git 2>&1 | dialog --progressbox "Downloading dmenu" 10 60
     downloaded=true
 fi
 

@@ -44,9 +44,10 @@ linkFile() {
 }
 
 loopThroughFiles() {
-    lastFolder=$(pwd -P)
+    # lastFolder=$(pwd -P)
 
-    DOTFILES=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
+    # DOTFILES=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
+    DOTFILES=$(pwd -P)
     cd $DOTFILES
 
     DOTFILES_HOME=$DOTFILES/dotfiles
@@ -82,7 +83,7 @@ loopThroughFiles() {
         done
     done
 
-    cd $lastFolder
+    # cd $lastFolder
 }
 
 loopThroughFiles

@@ -23,11 +23,18 @@ getGitconfigData() {
 }
 
 startRice() {
+    lastFolder=$(pwd -P)
+    cocoRiceFolder=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
+    cd $cocoRiceFolder
+
     dialog --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles. Make sure to backup your dotfiles!" 10 60
     getGitconfigData
     ./scripts/linkFiles.sh
     ./scripts/install.sh
+    dialog --title "CocoRice" --msgbox "All done! Enjoy..." 10 60
+
     clear
+    cd $lastFolder
 }
 
 startRice
