@@ -4,12 +4,28 @@ DOTFILES_CONFIG=$HOME/test/.config
 
 cd $DOTFILES_CONFIG
 
-git clone https://github.com/santilococo/dwmblocks.git
-git clone https://github.com/santilococo/dwm.git
-git clone https://github.com/santilococo/st.git
-git clone https://github.com/santilococo/dmenu.git
+downloaded=false
 
-sudo echo -n
+if [[ ! -d "dwmblocks" ]]; then
+    git clone https://github.com/santilococo/dwmblocks.git
+    downloaded=true
+fi
+if [[ ! -d "dwm" ]]; then
+    git clone https://github.com/santilococo/dwm.git
+    downloaded=true
+fi
+if [[ ! -d "st" ]]; then
+    git clone https://github.com/santilococo/st.git
+    downloaded=true
+fi
+if [[ ! -d "dmenu" ]]; then
+    git clone https://github.com/santilococo/dmenu.git
+    downloaded=true
+fi
+
+if [ downloaded = true ]; then
+    sudo echo -n
+fi
 
 #cd dwmblocks && sudo make install
 #cd dwm && sudo make install

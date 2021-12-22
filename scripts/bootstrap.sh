@@ -1,6 +1,11 @@
 #!/bin/sh
 
 getGitconfigData() {
+    dialog --stdout --yesno "Would you like to set up gitconfig?" 10 60
+    if [ $? -eq 1 ]; then
+        return
+    fi
+
     dialog --msgbox "Now, I will ask you for data to set up gitconfig personal account." 10 60
     gitPersonalName=$(dialog --inputbox "Enter a name." 10 60 3>&1 1>&2 2>&3 3>&1)
     gitPersonalMail=$(dialog --inputbox "Enter a mail." 10 60 3>&1 1>&2 2>&3 3>&1)
@@ -20,7 +25,7 @@ getGitconfigData() {
 startRice() {
     dialog --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles. Make sure to backup your dotfiles!" 10 60
 
-    # getGitconfigData
+    getGitconfigData
 
     ./scripts/linkFiles.sh
 
