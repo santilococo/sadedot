@@ -17,7 +17,7 @@ Clone the repo.
 Run
 
 ```bash
-./scripts/linkFiles.sh
+./scripts/bootstrap.sh
 ```
 
 and it will create symbolic links to the dotfiles in this repo.

@@ -43,42 +43,46 @@ linkFile() {
     fi
 }
 
-lastFolder=$(pwd -P)
+loopThroughFiles() {
+    lastFolder=$(pwd -P)
 
-DOTFILES=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
-cd $DOTFILES
+    DOTFILES=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
+    cd $DOTFILES
 
-DOTFILES_HOME=$DOTFILES/dotfiles
-DOTFILES_CONFIG="$DOTFILES_HOME/.config"
-DOTFILES_LOCAL="$DOTFILES_HOME/.local"
-DOTFILES_ICONS="$DOTFILES_HOME/.icons"
-DOTFILES_SSH="$DOTFILES_HOME/.ssh"
+    DOTFILES_HOME=$DOTFILES/dotfiles
+    DOTFILES_CONFIG="$DOTFILES_HOME/.config"
+    DOTFILES_LOCAL="$DOTFILES_HOME/.local"
+    DOTFILES_ICONS="$DOTFILES_HOME/.icons"
+    DOTFILES_SSH="$DOTFILES_HOME/.ssh"
 
-for srcFile in $(find -H "$DOTFILES_HOME" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*'); do
-    if [ "$(basename "${srcFile}")" = "CocoRice" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
-        continue
-    fi
-
-    if [[ -f "$srcFile" ]]; then
-        linkFile "$srcFile" "$HOME/test/$(basename "${srcFile}")"
-    fi
-done
-
-for initialFolder in "$DOTFILES_CONFIG" "$DOTFILES_ICONS" "$DOTFILES_SSH" "$DOTFILES_LOCAL"; do
-    for srcFile in $(find -H "$initialFolder"); do
-        if [[ -d "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
-
-            if [[ ! -d "$HOME/test/$var" ]]; then
-                mkdir -p "$HOME/test/$var"
-            fi
+    for srcFile in $(find -H "$DOTFILES_HOME" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*'); do
+        if [ "$(basename "${srcFile}")" = "CocoRice" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
+            continue
         fi
 
         if [[ -f "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
-            linkFile "$srcFile" "$HOME/test/$var"
+            linkFile "$srcFile" "$HOME/test/$(basename "${srcFile}")"
         fi
     done
-done
 
-cd $lastFolder
+    for initialFolder in "$DOTFILES_CONFIG" "$DOTFILES_ICONS" "$DOTFILES_SSH" "$DOTFILES_LOCAL"; do
+        for srcFile in $(find -H "$initialFolder"); do
+            if [[ -d "$srcFile" ]]; then
+                var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
+
+                if [[ ! -d "$HOME/test/$var" ]]; then
+                    mkdir -p "$HOME/test/$var"
+                fi
+            fi
+
+            if [[ -f "$srcFile" ]]; then
+                var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
+                linkFile "$srcFile" "$HOME/test/$var"
+            fi
+        done
+    done
+
+    cd $lastFolder
+}
+
+loopThroughFiles
