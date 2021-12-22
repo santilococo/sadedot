@@ -7,7 +7,7 @@ makeInstall() {
 }
 
 downloadAndInstallPackages() {
-    DOTFILES_CONFIG=$HOME/test/.config
+    DOTFILES_CONFIG=$HOME/.config
 
     cd $DOTFILES_CONFIG
 

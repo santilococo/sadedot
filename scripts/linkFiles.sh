@@ -16,7 +16,6 @@ linkFile() {
         else
             selectedOption=$(dialog --menu "File already exists: $(basename "$1"), what would you like to do?" 10 60 0 1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all" 3>&1 1>&2 2>&3 3>&1)
             if [ $? -eq 1 ]; then
-            # if [ "$selectedOption" = "" ]; then
                 exit 0
             fi
 
@@ -60,7 +59,7 @@ loopThroughFiles() {
         fi
 
         if [[ -f "$srcFile" ]]; then
-            linkFile "$srcFile" "$HOME/test/$(basename "${srcFile}")"
+            linkFile "$srcFile" "$HOME/$(basename "${srcFile}")"
         fi
     done
 
@@ -69,14 +68,14 @@ loopThroughFiles() {
             if [[ -d "$srcFile" ]]; then
                 var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
 
-                if [[ ! -d "$HOME/test/$var" ]]; then
-                    mkdir -p "$HOME/test/$var"
+                if [[ ! -d "$HOME/$var" ]]; then
+                    mkdir -p "$HOME/$var"
                 fi
             fi
 
             if [[ -f "$srcFile" ]]; then
                 var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
-                linkFile "$srcFile" "$HOME/test/$var"
+                linkFile "$srcFile" "$HOME/$var"
             fi
         done
     done
