@@ -3,8 +3,6 @@
 [Fork][1] this repository and you will be able to backup all your dotfiles (and easily install them on another machine).
 
 ## Table of contents
-- [CocoRice](#cocorice)
-  - [Table of contents](#table-of-contents)
   - [Installation <a name="installation"></a>](#installation-)
   - [Usage <a name="usage"></a>](#usage-)
   - [Dependencies <a name="dependencies"></a>](#dependencies-)
