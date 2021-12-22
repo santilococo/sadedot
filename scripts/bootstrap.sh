@@ -24,6 +24,8 @@ startRice() {
 
     ./scripts/linkFiles.sh
 
+    ./scripts/install.sh
+
     clear
 }
 
