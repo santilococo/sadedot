@@ -50,10 +50,11 @@ cd $DOTFILES
 
 DOTFILES_HOME=$DOTFILES/dotfiles
 DOTFILES_CONFIG="$DOTFILES_HOME/.config"
+DOTFILES_LOCAL="$DOTFILES_HOME/.local"
 DOTFILES_ICONS="$DOTFILES_HOME/.icons"
 DOTFILES_SSH="$DOTFILES_HOME/.ssh"
 
-for srcFile in $(find -H "$DOTFILES_HOME" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*'); do
+for srcFile in $(find -H "$DOTFILES_HOME" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*'); do
     if [ "$(basename "${srcFile}")" = "CocoRice" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
         continue
     fi
@@ -63,7 +64,7 @@ for srcFile in $(find -H "$DOTFILES_HOME" -not -path '*.git' -not -path '*.confi
     fi
 done
 
-for initialFolder in "$DOTFILES_CONFIG" "$DOTFILES_ICONS" "$DOTFILES_SSH"; do
+for initialFolder in "$DOTFILES_CONFIG" "$DOTFILES_ICONS" "$DOTFILES_SSH" "$DOTFILES_LOCAL"; do
     for srcFile in $(find -H "$initialFolder"); do
         if [[ -d "$srcFile" ]]; then
             var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
