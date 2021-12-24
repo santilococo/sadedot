@@ -29,7 +29,7 @@ checkForDependencies() {
         if [ -f "/etc/arch-release" ] || [ $unameOutput -eq 0 ]; then
             sudo pacman --noconfirm --needed -Sy dialog > /dev/null 2>&1
             if [ $? -eq 1 ]; then
-                echo "You must run this script as root and have an active internet connection." >&2
+                echo "You must have an active internet connection." >&2
                 exit 1
             fi
 
