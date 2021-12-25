@@ -1,7 +1,0 @@
-#!/bin/sh
-
-if pgrep "pcmanfm" > /dev/null; then
-    pkill "pcmanfm"
-else
-    "pcmanfm"
-fi
