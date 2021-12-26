@@ -14,7 +14,7 @@ linkFile() {
             mv "$2" "${2}.backup"
             ln -s "$1" "$2"
         else
-            selectedOption=$(dialog --menu "File already exists: $(basename "$1"), what would you like to do?" 10 60 0 1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all" 3>&1 1>&2 2>&3 3>&1)
+            selectedOption=$(displayDialogBox --menu "File already exists: $(basename "$1"), what would you like to do?" 10 60 0 1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all" 3>&1 1>&2 2>&3 3>&1)
             if [ $? -eq 1 ]; then
                 exit 0
             fi
@@ -44,16 +44,14 @@ linkFile() {
 }
 
 loopThroughFiles() {
-    DOTFILES=$(pwd -P)
-    cd $DOTFILES
+    COCORICE=$(pwd -P)
+    DOTFILES=$COCORICE/dotfiles
+    DOTFILES_CONFIG="$DOTFILES/.config"
+    DOTFILES_LOCAL="$DOTFILES/.local"
+    DOTFILES_ICONS="$DOTFILES/.icons"
+    DOTFILES_SSH="$DOTFILES/.ssh"
 
-    DOTFILES_HOME=$DOTFILES/dotfiles
-    DOTFILES_CONFIG="$DOTFILES_HOME/.config"
-    DOTFILES_LOCAL="$DOTFILES_HOME/.local"
-    DOTFILES_ICONS="$DOTFILES_HOME/.icons"
-    DOTFILES_SSH="$DOTFILES_HOME/.ssh"
-
-    for srcFile in $(find -H "$DOTFILES_HOME" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*'); do
+    for srcFile in $(find -H "$DOTFILES" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*'); do
         if [ "$(basename "${srcFile}")" = "CocoRice" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
             continue
         fi
@@ -79,6 +77,33 @@ loopThroughFiles() {
             fi
         done
     done
+
+    DOTFILES_OTHER=$DOTFILES/other
+
+    if [ -d "$DOTFILES_OTHER" ]; then
+        filesOutput=$(find -H "$DOTFILES_OTHER" | sed -n 2~1p | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
+        displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n$filesOutput"
+    fi
+
+    for srcFile in $(find -H "$DOTFILES_OTHER"); do
+        if [[ -d "$srcFile" ]]; then
+            var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
+
+            if [[ ! -d "$HOME/$var" ]]; then
+                sudo mkdir -p "$var"
+            fi
+        fi
+
+        if [[ -f "$srcFile" ]]; then
+            var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
+            sudo linkFile "$srcFile" "$var"
+        fi
+    done
 }
 
-loopThroughFiles
+runScript() {
+    source scripts/common.sh
+    loopThroughFiles
+}
+
+runScript

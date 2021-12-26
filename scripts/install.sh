@@ -1,15 +1,13 @@
 #!/bin/sh
 
 cloneAndMake() {
-    # git clone --progress $2 2>&1 | dialog --progressbox "Downloading ${1}" 0 0
-    whiptail "Downloading ${1}" 0 0
+    displayDialogBox "Downloading ${1}" 0 0
     git clone $2 2>&1
     cd $1; sudo make install; cd ..
 }
 
 downloadAndInstallPackages() {
     DOTFILES_CONFIG=$HOME/.config
-
     cd $DOTFILES_CONFIG
 
     if [[ ! -d "dwmblocks" ]]; then
@@ -29,4 +27,9 @@ downloadAndInstallPackages() {
     fi
 }
 
-downloadAndInstallPackages
+runScript() {
+    source scripts/common.sh
+    downloadAndInstallPackages
+}
+
+runScript
