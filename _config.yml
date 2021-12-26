@@ -1,5 +1,5 @@
 title: CocoRice
-logo: rice.jpg
+logo: assets/rice.jpg
 description: Keep your dotfiles
 show_downloads: true
 theme: jekyll-theme-minimal
