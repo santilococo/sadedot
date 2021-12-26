@@ -20,7 +20,15 @@ alias gp='git pull'
 alias gpsh='git push'
 alias gss='git status -s'
 # Undo commit (https://stackoverflow.com/questions/2845731/how-to-uncommit-my-last-commit-in-git)
-alias gundo='git reset --soft HEAD^'
+alias gundo='git reset --soft HEAD~1'
+alias gck='git checkout'
+
+gamp() {
+    git add .
+    local var="$@"
+    git commit -m "$var"
+    git push
+}
 
 alias exiftcl='exiftool -all='
 alias exift='exiftool'
