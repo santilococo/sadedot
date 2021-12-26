@@ -21,9 +21,20 @@ Run
 sh scripts/bootstrap.sh
 ```
 
+By default the script will run with whiptail (`libnewt`). 
+
+However, the script can use both `dialog` and `whiptail` as a way to display dialog boxes, so if you want to use dialog you have to pass `-d` as a parameter, and if you want to use whiptail `-w`.
+
+For example, you can run
+
+```bash
+sh scripts/bootstrap.sh -d
+```
+to use dialog.
+
 ## Dependencies <a name="dependencies"></a>
 
-You must install dialog.
+You must install `libnewt` or `dialog`.
 
 ## Contributing <a name="contributing"></a>
 PRs are welcome.
