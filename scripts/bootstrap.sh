@@ -24,11 +24,11 @@ checkParameters() {
                 ;;
             w)
                 checkForDependencies "libnewt"
-                displayDialog=useWhiptail
+                setDialogBox "whiptail"
                 ;;
             d)
                 checkForDependencies "dialog"
-                displayDialog=useDialog
+                setDialogBox "dialog"
                 ;;
             ?)
                 printf '%s: invalid option - '\''%s'\'\\n "${0##*/}" "$OPTARG"
@@ -39,27 +39,27 @@ checkParameters() {
 
     if [ $counter -eq 0 ]; then
         checkForDependencies "libnewt"
-        displayDialog=useWhiptail
+        setDialogBox "whiptail"
     fi
 }
 
 getGitconfigData() {
-    $displayDialog --yesno "Would you like to set up gitconfig?"
+    displayDialogBox --yesno "Would you like to set up gitconfig?"
     if [ $? -eq 1 ]; then
         return
     fi
 
-    $displayDialog --msgbox "Now, I will ask you for data to set up gitconfig personal account."
-    gitPersonalName=$($displayDialog --inputbox "Enter a name." 3>&1 1>&2 2>&3)
-    gitPersonalMail=$($displayDialog --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
+    displayDialogBox --msgbox "Now, I will ask you for data to set up gitconfig personal account."
+    gitPersonalName=$(displayDialogBox --inputbox "Enter a name." 3>&1 1>&2 2>&3)
+    gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
     
-    $displayDialog --msgbox "Let's continue with the work account."
-    gitWorkPath=$($displayDialog --inputbox "Enter an absolute folder path where you would like to use the work account." 3>&1 1>&2 2>&3)
+    displayDialogBox --msgbox "Let's continue with the work account."
+    gitWorkPath=$(displayDialogBox --inputbox "Enter an absolute folder path where you would like to use the work account." 3>&1 1>&2 2>&3)
     while [[ ! -d $gitWorkPath ]]; do
-        gitWorkPath=$($displayDialog --no-cancel --inputbox "Path isn't valid. Please try again" 3>&1 1>&2 2>&3)
+        gitWorkPath=$(displayDialogBox --no-cancel --inputbox "Path isn't valid. Please try again" 3>&1 1>&2 2>&3)
     done
-    gitWorkName=$($displayDialog --inputbox "Enter a name." 3>&1 1>&2 2>&3)
-    gitWorkMail=$($displayDialog --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
+    gitWorkName=$(displayDialogBox --inputbox "Enter a name." 3>&1 1>&2 2>&3)
+    gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
 
     sed -e "s/PERSONAL_NAME/$gitPersonalName/g" -e "s/PERSONAL_MAIL/$gitPersonalMail/g" -e "s|WORK_PATH|${gitWorkPath}|g" ./templates/.gitconfig > ./dotfiles/.gitconfig
     sed -e "s/WORK_NAME/$gitWorkName/g" -e "s/WORK_MAIL/$gitWorkMail/g" ./templates/.gitconfig-work > ./dotfiles/.gitconfig-work
@@ -90,30 +90,28 @@ checkForDependencies() {
     fi
 }
 
-useDialog() {
-    dialog "$@" 9 60
-}
-
-useWhiptail() {
-    whiptail "$@" 0 0
-}
-
-
 startRice() {
+
+    displayDialogBox --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
+    getGitconfigData
+    # sh scripts/linkFiles.sh
+    sh scripts/install.sh
+    displayDialogBox --title "CocoRice" --msgbox "All done! Enjoy..."
+}
+
+runScript() {
     lastFolder=$(pwd -P)
     cocoRiceFolder=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
     cd $cocoRiceFolder
 
-    $displayDialog --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
-    getGitconfigData
-    sh scripts/linkFiles.sh
-    sh scripts/install.sh
-    $displayDialog --title "CocoRice" --msgbox "All done! Enjoy..."
+    source scripts/common.sh
+    checkParameters $@
+    checkForDependencies
 
-    clear
+    startRice
+
+    # clear
     cd $lastFolder
 }
 
-checkParameters $@
-checkForDependencies
-startRice
+runScript $@
