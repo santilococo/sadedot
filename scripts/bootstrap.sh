@@ -1,33 +1,82 @@
 #!/bin/sh
 
+usage() {
+  cat << EOF
+usage: ${0##*/} [command]
+    -h                  Print this help message.
+    -w                  Use whiptail.
+    -d                  Use dialog.
+EOF
+}
+
+checkParameters() {
+    local counter=0
+    while getopts ':hwd' flag; do
+        if [ $((counter++)) -eq 1 ]; then
+            usage
+            exit 1
+        fi
+
+        case $flag in
+            h)
+                usage
+                exit 0
+                ;;
+            w)
+                checkForDependencies "libnewt"
+                displayDialog=useWhiptail
+                ;;
+            d)
+                checkForDependencies "dialog"
+                displayDialog=useDialog
+                ;;
+            ?)
+                printf '%s: invalid option - '\''%s'\'\\n "${0##*/}" "$OPTARG"
+                exit 1
+                ;;
+        esac
+    done
+
+    if [ $counter -eq 0 ]; then
+        checkForDependencies "libnewt"
+        displayDialog=useWhiptail
+    fi
+}
+
 getGitconfigData() {
-    whiptail --yesno "Would you like to set up gitconfig?" 0 0
+    $displayDialog --yesno "Would you like to set up gitconfig?"
     if [ $? -eq 1 ]; then
         return
     fi
 
-    whiptail --msgbox "Now, I will ask you for data to set up gitconfig personal account." 10 60
-    gitPersonalName=$(whiptail --inputbox "Enter a name." 0 0 3>&1 1>&2 2>&3)
-    gitPersonalMail=$(whiptail --inputbox "Enter an e-mail." 0 0 3>&1 1>&2 2>&3)
+    $displayDialog --msgbox "Now, I will ask you for data to set up gitconfig personal account."
+    gitPersonalName=$($displayDialog --inputbox "Enter a name." 3>&1 1>&2 2>&3)
+    gitPersonalMail=$($displayDialog --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
     
-    whiptail --msgbox "Let's continue with the work account." 0 0
-    gitWorkPath=$(whiptail --inputbox "Enter an absolute folder path where you would like to use the work account." 0 0 3>&1 1>&2 2>&3)
+    $displayDialog --msgbox "Let's continue with the work account."
+    gitWorkPath=$($displayDialog --inputbox "Enter an absolute folder path where you would like to use the work account." 3>&1 1>&2 2>&3)
     while [[ ! -d $gitWorkPath ]]; do
-        gitWorkPath=$(whiptail --no-cancel --inputbox "Path isn't valid. Please try again" 0 0 3>&1 1>&2 2>&3)
+        gitWorkPath=$($displayDialog --no-cancel --inputbox "Path isn't valid. Please try again" 3>&1 1>&2 2>&3)
     done
-    gitWorkName=$(whiptail --inputbox "Enter a name." 0 0 3>&1 1>&2 2>&3)
-    gitWorkMail=$(whiptail --inputbox "Enter an e-mail." 0 0 3>&1 1>&2 2>&3)
+    gitWorkName=$($displayDialog --inputbox "Enter a name." 3>&1 1>&2 2>&3)
+    gitWorkMail=$($displayDialog --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
 
     sed -e "s/PERSONAL_NAME/$gitPersonalName/g" -e "s/PERSONAL_MAIL/$gitPersonalMail/g" -e "s|WORK_PATH|${gitWorkPath}|g" ./templates/.gitconfig > ./dotfiles/.gitconfig
     sed -e "s/WORK_NAME/$gitWorkName/g" -e "s/WORK_MAIL/$gitWorkMail/g" ./templates/.gitconfig-work > ./dotfiles/.gitconfig-work
 }
 
 checkForDependencies() {
-    commOuput=$(command -v whiptail &> /dev/null)
+    if [ "$1" = "libnewt" ]; then
+        comm=whiptail
+    else
+        comm=$1
+    fi
+
+    commOuput=$(command -v ${comm} &> /dev/null)
     if [ $? -eq 1 ]; then
         unameOutput=$(uname -a | grep "arch")
         if [ -f "/etc/arch-release" ] || [ $unameOutput -eq 0 ]; then
-            sudo pacman --noconfirm --needed -Sy libnewt > /dev/null 2>&1
+            sudo pacman --noconfirm --needed -Sy ${1} > /dev/null 2>&1
             if [ $? -eq 1 ]; then
                 echo "You must have an active internet connection." >&2
                 exit 1
@@ -36,26 +85,35 @@ checkForDependencies() {
             return
         fi
 
-        echo "You must install libnewt." >&2
+        echo "You must install ${1}." >&2
         exit 1
     fi
 }
 
-startRice() {
-    checkForDependencies
+useDialog() {
+    dialog "$@" 9 60
+}
 
+useWhiptail() {
+    whiptail "$@" 0 0
+}
+
+
+startRice() {
     lastFolder=$(pwd -P)
     cocoRiceFolder=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
     cd $cocoRiceFolder
 
-    whiptail --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles." 0 0
+    $displayDialog --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
     sh scripts/linkFiles.sh
     sh scripts/install.sh
-    whiptail --title "CocoRice" --msgbox "All done! Enjoy..." 0 0
+    $displayDialog --title "CocoRice" --msgbox "All done! Enjoy..."
 
     clear
     cd $lastFolder
 }
 
+checkParameters $@
+checkForDependencies
 startRice
