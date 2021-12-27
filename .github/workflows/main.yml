@@ -1,0 +1,50 @@
+name: sync-branches
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:    
+      - uses: actions/checkout@v2
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: cocoArtifact
+          path: README.md
+          
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          
+      - name: Delete old README.md
+        run: |
+          rm README.md
+          
+      - uses: actions/download-artifact@v2
+        with:
+          name: cocoArtifact
+          path: cocoArtifact
+
+      - name: Push to gh-pages
+        run: |
+          git config --local user.name "$(git log --format=%an | head -n 1)"
+          git config --local user.email "$(git log --format=%ae | head -n 1)"
+          mv cocoArtifact/README.md README.md
+          rm -rf cocoArtifact
+          if [ ! -z "$(git status --porcelain)" ]; then
+            git add README.md
+            git commit -m "Add changes from master branch"
+            git push
+          fi
+                
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: cocoArtifact
