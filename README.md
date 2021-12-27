@@ -1,6 +1,6 @@
 # CocoRice
 
-[Fork][1] this repository and you will be able to backup all your dotfiles (and easily install them on another machine).
+Backup all your dotfiles (and easily deploy them on another machine).
 
 ## Table of contents
   - [Installation <a name="installation"></a>](#installation-)
@@ -11,11 +11,15 @@
 
 ## Installation <a name="installation"></a>
 
-Fork or clone this repo.
+[Fork][1] this repository.
 
 ## Usage <a name="usage"></a>
 
-Run
+You have to move all your dotfiles to the dotfiles folder and then the script will do the symbolic links. Doing it this way, you can now upload them to your repository (to have a backup of them). 
+
+You should note that all these dotfiles (files or folders) will be symlinked in `$HOME`. So, if you want to symlink, for example, something in `/etc`, you have to put it in the `dotfiles/other` folder. Here you have to be careful as they will be installed in `/`. You can see an example in this repository.
+
+So, to run the script:
 
 ```bash
 sh scripts/bootstrap.sh
