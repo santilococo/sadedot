@@ -17,7 +17,7 @@ Backup all your dotfiles (and easily deploy them on another machine).
 
 You have to move all your dotfiles to the dotfiles folder and then the script will do the symbolic links. Doing it this way, you can now upload them to your repository (to have a backup of them). 
 
-You should note that all these dotfiles (files or folders) will be symlinked in `$HOME`. So, if you want to symlink, for example, something in `/etc`, you have to put it in the `dotfiles/other` folder. Here you have to be careful as they will be installed in `/`. You can see an example in this repository.
+You should note that all these dotfiles (files or folders) will be symlinked in `$HOME`. So, if you want to symlink, for example, something in `/etc`, you have to put it in the `dotfiles/other` folder. Here you have to be careful as they will be installed in `/`. You can see an example [here][2].
 
 So, to run the script:
 
@@ -47,3 +47,4 @@ PRs are welcome.
 [MIT](https://choosealicense.com/licenses/mit/)
 
 [1]: https://github.com/santilococo/CocoRice/fork
+[2]: https://github.com/santilococo/CocoRice/tree/master/dotfiles/other
