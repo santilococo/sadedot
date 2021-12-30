@@ -83,6 +83,7 @@ loopThroughFiles() {
     if [ -d "$DOTFILES_OTHER" ]; then
         filesOutput=$(find -H "$DOTFILES_OTHER" | sed -n 2~1p | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
         displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n$filesOutput"
+        [ $? -eq 1 ] || return
     fi
 
     for srcFile in $(find -H "$DOTFILES_OTHER"); do

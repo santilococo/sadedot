@@ -65,6 +65,7 @@ getGitconfigData() {
 
     gitWorkPath=$(displayDialogBox --inputbox "Enter an absolute folder path where you would like to use the work account." 3>&1 1>&2 2>&3)
     while [[ ! -d $gitWorkPath ]]; do
+        [ $? -eq 1 ] || break
         gitWorkPath=$(displayDialogBox --inputbox "Path isn't valid. Please try again" 3>&1 1>&2 2>&3)
     done
     gitWorkName=$(displayDialogBox --inputbox "Enter a name." 3>&1 1>&2 2>&3)
