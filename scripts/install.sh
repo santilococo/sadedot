@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cloneAndMake() {
-    displayDialogBox "Downloading ${1}" 0 0
+    displayDialogBox --infobox "Downloading ${1}"
     git clone $2 2>&1
     cd $1; sudo make install; cd ..
 }
