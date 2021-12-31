@@ -88,11 +88,12 @@ loopThroughFiles() {
         displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n${files}" || return
     fi
 
-    sudo bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); "runDetachedScript""
+    sudo bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); "runDetachedScript" "$dialogBox""
 }
 
 runDetachedScript() {
     source scripts/common.sh
+    setDialogBox "$1"
 
     DOTFILES_OTHER=$(pwd -P)/dotfiles/other
 
