@@ -51,7 +51,7 @@ loopThroughFiles() {
     DOTFILES_ICONS="$DOTFILES/.icons"
     DOTFILES_SSH="$DOTFILES/.ssh"
 
-    for srcFile in $(find -H "$DOTFILES" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*'); do
+    for srcFile in $(find -H "$DOTFILES" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*' -not -path '*other*'); do
         if [ "$(basename "${srcFile}")" = "CocoRice" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
             continue
         fi
