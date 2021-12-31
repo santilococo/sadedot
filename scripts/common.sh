@@ -20,37 +20,25 @@ useDialog() {
 }
 
 useWhiptail() {
-    whiptail "$@" 0 0
-}
-
-calcWidthAndRun() {
-    width=$(echo "$@" | grep -oP '(?<=").*?(?=")' | wc -c)
-    comm=$(echo "$@" | sed "s/WIDTH/$((${width}+8))/g")
-    if [[ $comm != *"3>&1 1>&2 2>&3" ]]; then
-        comm="${comm} 3>&1 1>&2 2>&3"
-    fi
-    commOutput=$(eval $comm)
-    exitStatus=$?
-    [ ! -z $commOutput ] && echo $commOutput
-    return $exitStatus
-}
-
-calcHeightAndRun() {
     str=$(echo "$@" | grep -oP '(?<=").*?(?=")')
+    width=$(calcWidth "$str")
+    height=$(calcHeight "$str")
+    whiptail "$@" ${height} ${width}
+}
+
+calcWidth() {
+    width=$(echo "$str" | wc -c)
+    echo $((${width}+8))
+}
+
+calcHeight() {
     newlines=$(printf "$str" | grep -c $'\n')
     chars=$(echo "$str" | wc -c)
     height=$(echo "$chars" "$newlines" | awk '{
         x = (($1 - $2 + ($2 * 60)) / 60)
         printf "%d", (x == int(x)) ? x : int(x) + 1
     }')
-    comm=$(echo "$@" | sed "s/HEIGHT/$((5+$height))/g")
-    if [[ $comm != *"3>&1 1>&2 2>&3" ]]; then
-        toRun="${comm} 3>&1 1>&2 2>&3"
-    fi
-    commOutput=$(eval $comm)
-    exitStatus=$?
-    [ ! -z $commOutput ] && echo $commOutput
-    return $exitStatus
+    echo $((5+${height}))
 }
 
 setDialogBox() {
