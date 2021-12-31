@@ -24,7 +24,26 @@ displayDialogBox() {
 }
 
 useDialog() {
-    dialog "$@" 9 60
+    str="${@: -1}"
+    if [ "$str" = "VALUES" ]; then
+        argc="$#"; i=1
+        for item in "$@"; do
+            if [ $i -eq $((${argc}-1)) ]; then
+                str="$item"
+                break
+            fi
+            ((i++))
+        done
+    fi
+    width=$(calcWidth "$str")
+    height=$(calcHeight "$str")
+    formatOptions "$@"
+    if [ $found = false ]; then
+        height=0; width=0
+        dialog "$@" ${height} ${width}
+    else
+        dialog "${options[@]}"
+    fi
 }
 
 useWhiptail() {
