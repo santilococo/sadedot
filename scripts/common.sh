@@ -3,10 +3,18 @@
 displayDialogBox() {
     case $dialogBox in
         whiptail) 
-            useWhiptail "$@"
+            if [ "$1" = "--menu" ]; then
+                useWhiptailMenu "$@"
+            else
+                useWhiptail "$@"
+            fi
             ;;
         dialog)
-            useDialog "$@"
+            if [ "$1" = "--menu" ]; then
+                useDialogMenu "$@"
+            else
+                useDialog "$@"
+            fi
             ;;
         ?)
             echo "Unknown dialogBox variable" >&2
@@ -20,20 +28,49 @@ useDialog() {
 }
 
 useWhiptail() {
-    str=$(echo "$@" | grep -oP '(?<=").*?(?=")')
+    str="${@: -1}"
     width=$(calcWidth "$str")
     height=$(calcHeight "$str")
     whiptail "$@" ${height} ${width}
 }
 
+formatOptions() {
+    options=()
+    for item in "$@"; do
+        if [ "$item" = "VALUES" ]; then
+            options+=("${height}")
+            options+=("${width}")
+            continue
+        fi
+
+        if echo "$item" | grep -q "[0-9]" || echo "$item" | grep -q "[--]"; then
+            options+=("${item}")
+        else
+            options+=("\"${item}\"")
+        fi
+    done
+}
+
+useWhiptailMenu() {
+    height=0; width=0
+    formatOptions "$@"
+    whiptail "${options[@]}"
+}
+
+useDialogMenu() {
+    height=9; width=60
+    formatOptions "$@"
+    dialog "${options[@]}"
+}
+
 calcWidth() {
-    width=$(echo "$str" | wc -c)
+    width=$(echo "$1" | wc -c)
     echo $((${width}+8))
 }
 
 calcHeight() {
-    newlines=$(printf "$str" | grep -c $'\n')
-    chars=$(echo "$str" | wc -c)
+    newlines=$(printf "$1" | grep -c $'\n')
+    chars=$(echo "$1" | wc -c)
     height=$(echo "$chars" "$newlines" | awk '{
         x = (($1 - $2 + ($2 * 60)) / 60)
         printf "%d", (x == int(x)) ? x : int(x) + 1
