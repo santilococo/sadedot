@@ -29,25 +29,38 @@ useDialog() {
 
 useWhiptail() {
     str="${@: -1}"
+    if [ "$str" = "VALUES" ]; then
+        argc="$#"; i=1
+        for item in "$@"; do
+            if [ $i -eq $((${argc}-1)) ]; then
+                str="$item"
+                break
+            fi
+            ((i++))
+        done
+    fi
     width=$(calcWidth "$str")
     height=$(calcHeight "$str")
-    whiptail "$@" ${height} ${width}
+    formatOptions "$@"
+    if [ $found = false ]; then
+        height=0; width=0
+        whiptail "$@" ${height} ${width}
+    else
+        whiptail "${options[@]}"
+    fi
 }
 
 formatOptions() {
-    options=()
+    options=(); found=false
     for item in "$@"; do
         if [ "$item" = "VALUES" ]; then
             options+=("${height}")
             options+=("${width}")
+            found=true
             continue
         fi
 
-        if echo "$item" | grep -q "[0-9]" || echo "$item" | grep -q "[--]"; then
-            options+=("${item}")
-        else
-            options+=("\"${item}\"")
-        fi
+        options+=("${item}")
     done
 }
 
@@ -75,7 +88,7 @@ calcHeight() {
         x = (($1 - $2 + ($2 * 60)) / 60)
         printf "%d", (x == int(x)) ? x : int(x) + 1
     }')
-    echo $((5+${height}))
+    echo $((6+${height}))
 }
 
 setDialogBox() {

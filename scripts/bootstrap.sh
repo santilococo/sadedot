@@ -47,14 +47,14 @@ getGitconfigData() {
     displayDialogBox --yesno "Would you like to set up gitconfig?" || return
 
     displayDialogBox --msgbox "Now, I will ask you for data to set up gitconfig personal account."
-    gitPersonalName=$(displayDialogBox --inputbox "Enter a name." 3>&1 1>&2 2>&3)
-    gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
-    
+    gitPersonalName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+    gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
+
     while true; do
         displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitPersonalName}\n - E-mail: ${gitPersonalMail}"
         [ $? -eq 1 ] || break
-        gitPersonalName=$(displayDialogBox --inputbox "Enter a name." 3>&1 1>&2 2>&3)
-        gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
+        gitPersonalName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+        gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
     done
     
     displayDialogBox --yesno "Would you like to set up a work account?"
@@ -63,19 +63,19 @@ getGitconfigData() {
         return
     fi
 
-    gitWorkPath=$(displayDialogBox --inputbox "Enter an absolute folder path where you would like to use the work account." 3>&1 1>&2 2>&3)
+    gitWorkPath=$(displayDialogBox --inputbox "Enter an absolute folder path where you would like to use the work account." VALUES 3>&1 1>&2 2>&3)
     while [[ ! -d $gitWorkPath ]]; do
         [ $? -eq 1 ] || break
-        gitWorkPath=$(displayDialogBox --inputbox "Path isn't valid. Please try again" 3>&1 1>&2 2>&3)
+        gitWorkPath=$(displayDialogBox --inputbox "Path isn't valid. Please try again" VALUES 3>&1 1>&2 2>&3)
     done
-    gitWorkName=$(displayDialogBox --inputbox "Enter a name." 3>&1 1>&2 2>&3)
-    gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
+    gitWorkName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+    gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
 
     while true; do
         displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}"
         [ $? -eq 1 ] || break
-        gitWorkName=$(displayDialogBox --inputbox "Enter a name." 3>&1 1>&2 2>&3)
-        gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." 3>&1 1>&2 2>&3)
+        gitWorkName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+        gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
     done
 
     sed -e "s/PERSONAL_NAME/$gitPersonalName/g" -e "s/PERSONAL_MAIL/$gitPersonalMail/g" -e "s|WORK_PATH|${gitWorkPath}|g" ./templates/.gitconfig > ./dotfiles/.gitconfig
