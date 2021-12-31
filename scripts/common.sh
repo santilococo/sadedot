@@ -38,7 +38,10 @@ useDialog() {
     fi
     width=$(calcWidthDialog "$str")
     height=$(calcHeightDialog "$str")
-    [ $inputbox = true ] && height=$((${height}+2))
+    if [ $inputbox = true ]; then
+        width=$((${width}+15))
+        height=$((${height}+2))
+    fi
     formatOptions "$@"
     if [ $found = false ]; then
         dialog "$@" ${height} ${width}
