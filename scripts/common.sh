@@ -39,7 +39,7 @@ useDialog() {
     height=$(calcHeight "$str")
     formatOptions "$@"
     if [ $found = false ]; then
-        height=0; width=0
+        height=10; width=60
         dialog "$@" ${height} ${width}
     else
         dialog "${options[@]}"
