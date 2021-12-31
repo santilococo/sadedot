@@ -51,7 +51,7 @@ useDialog() {
 }
 
 useWhiptail() {
-    str="${@: -1}"
+    str="${@: -1}"; inputbox=false
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
@@ -59,11 +59,15 @@ useWhiptail() {
                 str="$item"
                 break
             fi
+            [ "$item" = "--inputbox" ] && inputbox=true
             ((i++))
         done
     fi
     width=$(calcWidthWhiptail "$str")
     height=$(calcHeightWhiptail "$str")
+    if [ $inputbox = true ]; then
+        width=$((${width}+15))
+    fi
     formatOptions "$@"
     if [ $found = false ]; then
         height=0; width=0
