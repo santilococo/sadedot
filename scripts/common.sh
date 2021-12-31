@@ -24,7 +24,7 @@ displayDialogBox() {
 }
 
 useDialog() {
-    str="${@: -1}"
+    str="${@: -1}"; inputbox=false
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
@@ -32,14 +32,15 @@ useDialog() {
                 str="$item"
                 break
             fi
+            [ "$item" = "--inputbox" ] && inputbox=true
             ((i++))
         done
     fi
-    width=$(calcWidth "$str")
-    height=$(calcHeight "$str")
+    width=$(calcWidthDialog "$str")
+    height=$(calcHeightDialog "$str")
+    [ $inputbox = true ] && height=$((${height}+2))
     formatOptions "$@"
     if [ $found = false ]; then
-        height=10; width=60
         dialog "$@" ${height} ${width}
     else
         dialog "${options[@]}"
@@ -58,8 +59,8 @@ useWhiptail() {
             ((i++))
         done
     fi
-    width=$(calcWidth "$str")
-    height=$(calcHeight "$str")
+    width=$(calcWidthWhiptail "$str")
+    height=$(calcHeightWhiptail "$str")
     formatOptions "$@"
     if [ $found = false ]; then
         height=0; width=0
@@ -95,12 +96,32 @@ useDialogMenu() {
     dialog "${options[@]}"
 }
 
-calcWidth() {
+calcWidthWhiptail() {
     width=$(echo "$1" | wc -c)
     echo $((${width}+8))
 }
 
-calcHeight() {
+calcWidthDialog() {
+    str=$1; count=1; found=false; option=1
+    for (( i = 0; i < ${#str}; i++ )); do
+        if [ "${str:$i:1}" = '\' ] && [ "${str:$((i+1)):1}" = 'n' ]; then
+            if [ $count -ge $option ]; then
+                option=$count
+            fi
+            found=true
+            count=-1
+        fi
+        ((count++))
+    done
+
+    if [ $found = false ]; then
+        echo $(($count+8))
+    else
+        echo $option
+    fi
+}
+
+calcHeightWhiptail() {
     newlines=$(printf "$1" | grep -c $'\n')
     chars=$(echo "$1" | wc -c)
     height=$(echo "$chars" "$newlines" | awk '{
@@ -108,6 +129,16 @@ calcHeight() {
         printf "%d", (x == int(x)) ? x : int(x) + 1
     }')
     echo $((6+${height}))
+}
+
+calcHeightDialog() {
+    newlines=$(printf "$1" | grep -c $'\n')
+    chars=$(echo "$1" | wc -c)
+    height=$(echo "$chars" "$newlines" | awk '{
+        x = (($1 - $2 + ($2 * 60)) / 60)
+        printf "%d", (x == int(x)) ? x : int(x) + 1
+    }')
+    echo $((4+${height}))
 }
 
 setDialogBox() {
