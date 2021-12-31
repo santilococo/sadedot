@@ -85,18 +85,26 @@ loopThroughFiles() {
         displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n$filesOutput" || return
     fi
 
+    sudo bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); "runDetachedScript""
+}
+
+runDetachedScript() {
+    source scripts/common.sh
+
+    DOTFILES_OTHER=$(pwd -P)/dotfiles/other
+
     for srcFile in $(find -H "$DOTFILES_OTHER"); do
         if [[ -d "$srcFile" ]]; then
             var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
 
             if [[ ! -d "/$var" ]]; then
-                sudo mkdir -p "/$var"
+                mkdir -p "/$var"
             fi
         fi
 
         if [[ -f "$srcFile" ]]; then
             var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
-            sudo bash -c "$(declare -f linkFile); "linkFile" "$srcFile" "/$var""
+            linkFile "$srcFile" "/$var"
         fi
     done
 }
