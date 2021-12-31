@@ -51,8 +51,7 @@ getGitconfigData() {
     gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
 
     while true; do
-        displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitPersonalName}\n - E-mail: ${gitPersonalMail}"
-        [ $? -eq 1 ] || break
+        displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitPersonalName}\n - E-mail: ${gitPersonalMail}" && break
         gitPersonalName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
         gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
     done
@@ -65,15 +64,13 @@ getGitconfigData() {
 
     gitWorkPath=$(displayDialogBox --inputbox "Enter an absolute folder path where you would like to use the work account." VALUES 3>&1 1>&2 2>&3)
     while [[ ! -d $gitWorkPath ]]; do
-        [ $? -eq 1 ] || break
         gitWorkPath=$(displayDialogBox --inputbox "Path isn't valid. Please try again" VALUES 3>&1 1>&2 2>&3)
     done
     gitWorkName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
     gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
 
     while true; do
-        displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}"
-        [ $? -eq 1 ] || break
+        displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}" && break
         gitWorkName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
         gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
     done
@@ -110,9 +107,9 @@ checkForDependencies() {
 startRice() {
     displayDialogBox --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
-    sh scripts/linkFiles.sh
-    sh scripts/install.sh
-    displayDialogBox --title "CocoRice" --msgbox "All done! Enjoy..."
+    # sh scripts/linkFiles.sh
+    # sh scripts/install.sh
+    # displayDialogBox --title "CocoRice" --msgbox "All done! Enjoy..."
 }
 
 runScript() {
@@ -126,7 +123,7 @@ runScript() {
 
     startRice
 
-    clear
+    # clear
     cd $lastFolder
 }
 
