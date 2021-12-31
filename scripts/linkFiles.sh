@@ -96,7 +96,7 @@ loopThroughFiles() {
 
         if [[ -f "$srcFile" ]]; then
             var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
-            sudo linkFile "$srcFile" "/$var"
+            sudo bash -c "$(declare -f linkFile); "linkFile" "$srcFile" "/$var""
         fi
     done
 }
