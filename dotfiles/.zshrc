@@ -14,7 +14,7 @@ HISTFILE=~/.cache/zsh/.histfile
 export ZSH="/usr/share/oh-my-zsh"
 
 #ZSH_THEME="pmcgee"
-export ZSH_CUSTOM="/usr/share"
+ZSH_CUSTOM="/usr/share"
 ZSH_THEME="zsh-theme-powerlevel10k/powerlevel10k"
 
 # Uncomment the following line to use case-sensitive completion.
