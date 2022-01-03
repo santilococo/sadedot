@@ -32,4 +32,6 @@ runScript() {
     downloadAndInstallPackages
 }
 
-runScript
+# runScript
+    source scripts/common.sh
+    displayDialogBox --infobox "Downloading 'dwmblocks'"

@@ -1,0 +1,62 @@
+
+In scripts/install.sh line 5:
+    git clone $2 > /dev/null 2>&1
+              ^-- SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+    git clone "$2" > /dev/null 2>&1
+
+
+In scripts/install.sh line 6:
+    cd $1; sudo make install > /dev/null 2>&1; cd ..
+    ^---^ SC2164 (warning): Use 'cd ... || exit' or 'cd ... || return' in case cd fails.
+       ^-- SC2086 (info): Double quote to prevent globbing and word splitting.
+                                               ^---^ SC2103 (info): Use a ( subshell ) to avoid having to cd back.
+
+Did you mean: 
+    cd "$1" || exit; sudo make install > /dev/null 2>&1; cd ..
+
+
+In scripts/install.sh line 11:
+    cd $DOTFILES_CONFIG
+    ^-----------------^ SC2164 (warning): Use 'cd ... || exit' or 'cd ... || return' in case cd fails.
+       ^--------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+    cd "$DOTFILES_CONFIG" || exit
+
+
+In scripts/install.sh line 13:
+    if [[ ! -d "dwmblocks" ]]; then
+       ^--------------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/install.sh line 16:
+    if [[ ! -d "dwm" ]]; then
+       ^--------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/install.sh line 19:
+    if [[ ! -d "st" ]]; then
+       ^-------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/install.sh line 22:
+    if [[ ! -d "dmenu" ]]; then
+       ^----------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/install.sh line 25:
+    if [[ ! -d "clipmenu" ]]; then
+       ^-------------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/install.sh line 31:
+    source scripts/common.sh
+    ^----------------------^ SC3046 (warning): In POSIX sh, 'source' in place of '.' is undefined.
+           ^---------------^ SC1091 (info): Not following: scripts/common.sh was not specified as input (see shellcheck -x).
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2164 -- Use 'cd ... || exit' or 'cd ... |...
+  https://www.shellcheck.net/wiki/SC3010 -- In POSIX sh, [[ ]] is undefined.
+  https://www.shellcheck.net/wiki/SC3046 -- In POSIX sh, 'source' in place of...

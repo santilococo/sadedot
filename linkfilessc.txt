@@ -1,0 +1,139 @@
+
+In scripts/linkFiles.sh line 8:
+    if [[ -f "$2" ]]; then
+       ^-----------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 9:
+        if [ "$skip_all" == "true" ]; then
+                         ^-- SC3014 (warning): In POSIX sh, == in place of = is undefined.
+
+
+In scripts/linkFiles.sh line 11:
+        elif [ "$overwrite_all" == "true" ]; then
+                                ^-- SC3014 (warning): In POSIX sh, == in place of = is undefined.
+
+
+In scripts/linkFiles.sh line 13:
+        elif [ "$backup_all" == "true" ]; then
+                             ^-- SC3014 (warning): In POSIX sh, == in place of = is undefined.
+
+
+In scripts/linkFiles.sh line 22:
+            if [ $selectedOption -eq 1 ]; then
+                 ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            if [ "$selectedOption" -eq 1 ]; then
+
+
+In scripts/linkFiles.sh line 24:
+            elif [ $selectedOption -eq 2 ]; then
+                   ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            elif [ "$selectedOption" -eq 2 ]; then
+
+
+In scripts/linkFiles.sh line 27:
+            elif [ $selectedOption -eq 3 ]; then
+                   ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            elif [ "$selectedOption" -eq 3 ]; then
+
+
+In scripts/linkFiles.sh line 29:
+            elif [ $selectedOption -eq 4 ]; then
+                   ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            elif [ "$selectedOption" -eq 4 ]; then
+
+
+In scripts/linkFiles.sh line 32:
+            elif [ $selectedOption -eq 5 ]; then
+                   ^-------------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            elif [ "$selectedOption" -eq 5 ]; then
+
+
+In scripts/linkFiles.sh line 54:
+    for srcFile in $(find -H "$DOTFILES" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*' -not -path '*other*'); do
+                   ^-- SC2044 (warning): For loops over find output are fragile. Use find -exec or a while read loop.
+
+
+In scripts/linkFiles.sh line 59:
+        if [[ -f "$srcFile" ]]; then
+           ^-----------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 65:
+        for srcFile in $(find -H "$initialFolder"); do
+                       ^-------------------------^ SC2044 (warning): For loops over find output are fragile. Use find -exec or a while read loop.
+
+
+In scripts/linkFiles.sh line 66:
+            if [[ -d "$srcFile" ]]; then
+               ^-----------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 69:
+                if [[ ! -d "$HOME/$var" ]]; then
+                   ^---------------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 74:
+            if [[ -f "$srcFile" ]]; then
+               ^-----------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 91:
+    sudo bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); "runDetachedScript" "$dialogBox""
+                    ^--------------------------^ SC3044 (warning): In POSIX sh, 'declare' is undefined.
+                                                     ^-----------------^ SC3044 (warning): In POSIX sh, 'declare' is undefined.
+                                                                            ^---------------^ SC2140 (warning): Word is of the form "A"B"C" (B indicated). Did you mean "ABC" or "A\"B\"C"?
+                                                                                                ^--------^ SC2027 (warning): The surrounding quotes actually unquote this. Remove or escape them.
+                                                                                                ^--------^ SC2154 (warning): dialogBox is referenced but not assigned.
+                                                                                                ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+    sudo bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); "runDetachedScript" ""$dialogBox"""
+
+
+In scripts/linkFiles.sh line 95:
+    source scripts/common.sh
+    ^----------------------^ SC3046 (warning): In POSIX sh, 'source' in place of '.' is undefined.
+           ^---------------^ SC1091 (info): Not following: scripts/common.sh was not specified as input (see shellcheck -x).
+
+
+In scripts/linkFiles.sh line 100:
+    for srcFile in $(find -H "$DOTFILES_OTHER"); do
+                   ^--------------------------^ SC2044 (warning): For loops over find output are fragile. Use find -exec or a while read loop.
+
+
+In scripts/linkFiles.sh line 101:
+        if [[ -d "$srcFile" ]]; then
+           ^-----------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 104:
+            if [[ ! -d "/$var" ]]; then
+               ^----------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 109:
+        if [[ -f "$srcFile" ]]; then
+           ^-----------------^ SC3010 (warning): In POSIX sh, [[ ]] is undefined.
+
+
+In scripts/linkFiles.sh line 117:
+    source scripts/common.sh
+    ^----------------------^ SC3046 (warning): In POSIX sh, 'source' in place of '.' is undefined.
+           ^---------------^ SC1091 (info): Not following: scripts/common.sh was not specified as input (see shellcheck -x).
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2027 -- The surrounding quotes actually u...
+  https://www.shellcheck.net/wiki/SC2044 -- For loops over find output are fr...
+  https://www.shellcheck.net/wiki/SC2140 -- Word is of the form "A"B"C" (B in...

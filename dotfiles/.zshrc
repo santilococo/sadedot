@@ -11,7 +11,7 @@ SAVEHIST=10000
 HISTFILE=~/.cache/zsh/.histfile
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/slococo/.oh-my-zsh"
+export ZSH="/usr/share/oh-my-zsh"
 
 #ZSH_THEME="pmcgee"
 ZSH_THEME="powerlevel10k/powerlevel10k"
