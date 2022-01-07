@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 displayDialogBox() {
     case $dialogBox in

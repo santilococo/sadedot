@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 cloneAndMake() {
     displayDialogBox --infobox "Downloading ${1}" VALUES
