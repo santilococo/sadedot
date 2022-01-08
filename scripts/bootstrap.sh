@@ -86,13 +86,13 @@ checkForDependencies() {
         comm=$1
     fi
 
-    commOuput=$(command -v ${comm} &> /dev/null)
+    command -v ${comm} &> /dev/null
     if [ $? -eq 1 ]; then
         unameOutput=$(uname -a | grep "arch")
         if [ -f "/etc/arch-release" ] || [ $unameOutput -eq 0 ]; then
             sudo pacman --noconfirm --needed -Sy ${1} > /dev/null 2>&1
             if [ $? -eq 1 ]; then
-                echo "You must have an active internet connection." >&2
+                echo "Couldn't install ${1}." >&2
                 exit 1
             fi
 
@@ -114,11 +114,11 @@ startRice() {
 
 runScript() {
     lastFolder=$(pwd -P)
-    cocoRiceFolder=$(echo "$(pwd -P)" | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
+    cocoRiceFolder=$(pwd -P | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
     cd $cocoRiceFolder
 
     source scripts/common.sh
-    checkParameters $@
+    checkParameters "$@"
     checkForDependencies
 
     startRice
@@ -127,4 +127,4 @@ runScript() {
     cd $lastFolder
 }
 
-runScript $@
+runScript "$@"

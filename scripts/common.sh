@@ -28,7 +28,7 @@ useDialog() {
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
-            if [ $i -eq $((${argc}-1)) ]; then
+            if [ $i -eq $((argc-1)) ]; then
                 str="$item"
                 break
             fi
@@ -39,8 +39,8 @@ useDialog() {
     width=$(calcWidthDialog "$str")
     height=$(calcHeightDialog "$str")
     if [ $inputbox = true ]; then
-        width=$((${width}+15))
-        height=$((${height}+2))
+        width=$((width+15))
+        height=$((height+2))
     fi
     formatOptions "$@"
     if [ $found = false ]; then
@@ -55,7 +55,7 @@ useWhiptail() {
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
-            if [ $i -eq $((${argc}-1)) ]; then
+            if [ $i -eq $((argc-1)) ]; then
                 str="$item"
                 break
             fi
@@ -67,7 +67,7 @@ useWhiptail() {
     width=$(calcWidthWhiptail "$str")
     height=$(calcHeightWhiptail "$str")
     if [ $inputbox = true ]; then
-        width=$((${width}+15))
+        width=$((width+15))
     fi
     if [ $infobox = true ]; then
         height=$((height-1))
@@ -109,7 +109,7 @@ useDialogMenu() {
 
 calcWidthWhiptail() {
     width=$(echo "$1" | wc -c)
-    echo $((${width}+8))
+    echo $((width+8))
 }
 
 calcWidthDialog() {
@@ -126,7 +126,7 @@ calcWidthDialog() {
     done
 
     if [ $found = false ]; then
-        echo $(($count+8))
+        echo $((count+8))
     else
         echo $option
     fi
@@ -139,7 +139,7 @@ calcHeightWhiptail() {
         x = (($1 - $2 + ($2 * 60)) / 60)
         printf "%d", (x == int(x)) ? x : int(x) + 1
     }')
-    echo $((6+${height}))
+    echo $((6+height))
 }
 
 calcHeightDialog() {
@@ -149,7 +149,7 @@ calcHeightDialog() {
         x = (($1 - $2 + ($2 * 60)) / 60)
         printf "%d", (x == int(x)) ? x : int(x) + 1
     }')
-    echo $((4+${height}))
+    echo $((4+height))
 }
 
 setDialogBox() {
