@@ -2,7 +2,7 @@
 
 displayDialogBox() {
     case $dialogBox in
-        whiptail) 
+        whiptail)
             if [ "$1" = "--menu" ]; then
                 useWhiptailMenu "$@"
             else

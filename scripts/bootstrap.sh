@@ -18,19 +18,19 @@ checkParameters() {
         fi
 
         case $flag in
-            h)  
+            h)
                 usage
                 exit 0
                 ;;
-            w)  
+            w)
                 checkForDependencies "libnewt"
                 setDialogBox "whiptail"
                 ;;
-            d)  
+            d)
                 checkForDependencies "dialog"
                 setDialogBox "dialog"
                 ;;
-            ?)  
+            ?)
                 printf '%s: invalid option - '\''%s'\'\\n "${0##*/}" "$OPTARG"
                 exit 1
                 ;;
