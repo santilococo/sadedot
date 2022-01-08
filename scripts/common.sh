@@ -6,6 +6,9 @@ displayDialogBox() {
             if [ "$1" = "--menu" ]; then
                 useWhiptailMenu "$@"
             else
+                if [ "$1" = "--infobox" ] && tty | grep -q "/dev/pts"; then
+                    local TERM=ansi
+                fi
                 useWhiptail "$@"
             fi
             ;;
