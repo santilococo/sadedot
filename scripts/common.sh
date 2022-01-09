@@ -158,3 +158,11 @@ calcHeightDialog() {
 setDialogBox() {
     export dialogBox=${1}
 }
+
+setDebugToFile() {
+    export debugFlagToFile=${1}
+}
+
+debug() {
+    [ $debugFlagToFile = true ] && tee -a CocoRice.log > /dev/null
+}

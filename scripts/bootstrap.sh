@@ -6,6 +6,7 @@ usage: ${0##*/} [command]
     -h                  Print this help message.
     -w                  Use whiptail.
     -d                  Use dialog.
+    -f                  Debug to CocoRice.log
 EOF
 }
 
@@ -29,6 +30,11 @@ checkParameters() {
             d)
                 checkForDependencies "dialog"
                 setDialogBox "dialog"
+                ;;
+            f)
+                checkForDependencies "libnewt"
+                setDialogBox "whiptail"
+                setDebugToFile false
                 ;;
             ?)
                 printf '%s: invalid option - '\''%s'\'\\n "${0##*/}" "$OPTARG"
