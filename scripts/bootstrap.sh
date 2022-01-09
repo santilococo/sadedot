@@ -6,7 +6,7 @@ usage: ${0##*/} [command]
     -h                  Print this help message.
     -w                  Use whiptail.
     -d                  Use dialog.
-    -f                  Debug to CocoRice.log
+    -f                  Debug to CocoRice.log file.
 EOF
 }
 
@@ -96,7 +96,7 @@ checkForDependencies() {
     if [ $? -eq 1 ]; then
         unameOutput=$(uname -a | grep "arch")
         if [ -f "/etc/arch-release" ] || [ $unameOutput -eq 0 ]; then
-            sudo pacman --noconfirm --needed -Sy ${1} > /dev/null 2>&1
+            sudo pacman --noconfirm --needed -Sy ${1} 2>&1 | debug
             if [ $? -eq 1 ]; then
                 echo "Couldn't install ${1}." >&2
                 exit 1

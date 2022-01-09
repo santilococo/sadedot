@@ -2,8 +2,8 @@
 
 cloneAndMake() {
     displayDialogBox --infobox "Downloading ${1}" VALUES
-    git clone $2 > /dev/null 2>&1
-    (cd $1; sudo make install > /dev/null 2>&1)
+    git clone $2 2>&1 | debug
+    (cd $1; sudo make install 2>&1 | debug)
 }
 
 downloadAndInstallPackages() {
