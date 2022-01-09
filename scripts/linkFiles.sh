@@ -14,7 +14,7 @@ linkFile() {
             mv "$2" "${2}.backup"
             ln -s "$1" "$2"
         else
-            selectedOption=$(displayDialogBox --menu "File already exists: $(basename "$1"), what would you like to do?" VALUES 0 1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all" 3>&1 1>&2 2>&3 3>&1)
+            selectedOption=$(displayDialogBox --menu "File already exists: $(basename "$1"), what would you like to do?" VALUES 0 1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all" 3>&1 1>&2 2>&3)
             if [ $? -eq 1 ]; then
                 exit 0
             fi
@@ -88,7 +88,7 @@ loopThroughFiles() {
         displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n${files}" || return
     fi
 
-    password=$(displayDialogBox --passwordbox "Enter your password" 3>&1 1>&2 2>&3)
+    password=$(displayDialogBox --passwordbox "Enter your password" VALUES 3>&1 1>&2 2>&3)
     echo $password | sudo -S bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript $dialogBox"
     unset password
 }
