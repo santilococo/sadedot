@@ -88,7 +88,7 @@ loopThroughFiles() {
         displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n${files}" || return
     fi
 
-    password=$(displayDialogBox --password "Enter your password" 3>&1 1>&2 2>&3)
+    password=$(displayDialogBox --passwordbox "Enter your password" 3>&1 1>&2 2>&3)
     echo $password | sudo -S bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript $dialogBox"
     unset password
 }
