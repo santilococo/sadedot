@@ -120,6 +120,7 @@ runScript() {
     source scripts/common.sh
     checkParameters "$@"
     checkForDependencies
+    clear
 
     startRice
 
