@@ -117,7 +117,6 @@ runDetachedScript() {
 }
 
 runScript() {
-    # source scripts/common.sh
     loopThroughFiles
 }
 
