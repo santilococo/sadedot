@@ -34,7 +34,7 @@ checkParameters() {
             l)
                 checkForDependencies "libnewt"
                 setDialogBox "whiptail"
-                setDebugToFile false
+                setDebugToFile true
                 ;;
             ?)
                 printf '%s: invalid option - '\''%s'\'\\n "${0##*/}" "$OPTARG"

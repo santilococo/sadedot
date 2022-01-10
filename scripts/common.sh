@@ -164,5 +164,5 @@ setDebugToFile() {
 }
 
 debug() {
-    [ $debugFlagToFile = true ] && tee -a CocoRice.log > /dev/null
+    [ -z ${debugFlagToFile+x} ] && [ $debugFlagToFile = true ] && tee -a CocoRice.log > /dev/null
 }
