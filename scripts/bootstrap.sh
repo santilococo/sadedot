@@ -113,8 +113,8 @@ checkForDependencies() {
 startRice() {
     displayDialogBox --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
-    sh scripts/linkFiles.sh
-    sh scripts/install.sh
+    source scripts/linkFiles.sh
+    source scripts/install.sh
     displayDialogBox --title "CocoRice" --msgbox "All done! Enjoy..."
 }
 

@@ -28,7 +28,7 @@ downloadAndInstallPackages() {
 }
 
 runScript() {
-    source scripts/common.sh
+    # source scripts/common.sh
     downloadAndInstallPackages
 }
 
