@@ -36,6 +36,8 @@ sh scripts/bootstrap.sh -d
 ```
 to use dialog.
 
+Finally, you can run the script with `-f` if you want to print the log in the CocoRice.log file.
+
 ## Dependencies <a name="dependencies"></a>
 
 You must install `libnewt` or `dialog`.

@@ -6,7 +6,7 @@ usage: ${0##*/} [command]
     -h                  Print this help message.
     -w                  Use whiptail.
     -d                  Use dialog.
-    -f                  Debug to CocoRice.log file.
+    -l                  Log to CocoRice.log file.
 EOF
 }
 
@@ -31,7 +31,7 @@ checkParameters() {
                 checkForDependencies "dialog"
                 setDialogBox "dialog"
                 ;;
-            f)
+            l)
                 checkForDependencies "libnewt"
                 setDialogBox "whiptail"
                 setDebugToFile false
