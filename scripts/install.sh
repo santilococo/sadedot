@@ -23,7 +23,7 @@ downloadAndInstallPackages() {
         cloneAndMake "dmenu" "https://github.com/santilococo/dmenu.git"
     fi
     if [[ ! -d "clipmenu" ]]; then
-        cloneAndMake "clipmenu" "https://github.com/cdown/dotfiles.git"
+        cloneAndMake "clipmenu" "https://github.com/cdown/clipmenu.git"
     fi
 }
 
