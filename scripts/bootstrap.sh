@@ -116,7 +116,7 @@ startRice() {
 runScript() {
     lastFolder=$(pwd -P)
     cocoRiceFolder=$(pwd -P | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
-    cd "$cocoRiceFolder" || echo "Couldn't cd into '$cocoRiceFolder'." 1>&2 && exit 1
+    cd "$cocoRiceFolder" || { echo "Couldn't cd into '$cocoRiceFolder'." 1>&2 && exit 1; }
 
     source scripts/common.sh
     checkParameters "$@"
@@ -126,7 +126,7 @@ runScript() {
     startRice
 
     clear
-    cd "$lastFolder" || echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1
+    cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
 }
 
 runScript "$@"
