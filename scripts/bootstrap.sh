@@ -3,38 +3,38 @@
 usage() {
   cat << EOF
 usage: ${0##*/} [command]
-    -h                  Print this help message.
-    -w                  Use whiptail.
-    -d                  Use dialog.
-    -l                  Log to CocoRice.log file.
+    -h | --help         Print this help message.
+    -d | --dialog       Use dialog.
+    -l | --log          Log to CocoRice.log file.
 EOF
 }
 
 checkParameters() {
-    local counter=0
-    while getopts ':hwdfp' flag; do
-        case $flag in
-            h)
+    while [ -n "$1" ]; do
+        case $1 in
+            -h | --help)
                 usage
                 exit 0
                 ;;
-            d)
+            -d | --dialog)
+                echo "dialog"
                 checkForDependencies "dialog"
                 setDialogBox "dialog"
                 ;;
-            f)
+            -l | --log)
                 checkForDependencies "libnewt"
                 setDialogBox "whiptail"
-                setDebugToFile true
+                setLogToFile true
                 ;;
-            p) 
+            -p | --packages) 
                 installPackages=true
                 ;;
-            ?)
-                printf '%s: invalid option -%s\n' "${0##*/}" "$OPTARG"
+            *)
+                printf '%s: invalid option %s\n' "${0##*/}" "$1"
                 exit 1
                 ;;
         esac
+        shift
     done
 
     if [ -z "$(getDialogBox)" ]; then

@@ -163,10 +163,10 @@ getDialogBox() {
     echo "$dialogBox"
 }
 
-setDebugToFile() {
-    export debugFlagToFile=${1}
+setLogToFile() {
+    export logToFile=${1}
 }
 
 debug() {
-    [[ -z ${debugFlagToFile+x} || $debugFlagToFile = true ]] && tee -a CocoRice.log > /dev/null
+    [[ -z ${logToFile+x} || $logToFile = true ]] && tee -a CocoRice.log > /dev/null
 }
