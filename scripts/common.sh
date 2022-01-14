@@ -174,5 +174,5 @@ setLogToFile() {
 }
 
 debug() {
-    [[ -z ${logToFile+x} || $logToFile = true ]] && tee -a CocoRice.log > /dev/null
+    [[ -z ${logToFile+x} || $logToFile = true ]] && tee -a sadedot.log > /dev/null
 }
