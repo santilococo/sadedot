@@ -25,7 +25,7 @@ So, to run the script:
 sh scripts/bootstrap.sh
 ```
 
-By default the script will run with whiptail (`libnewt`). 
+By default the script will run with whiptail (`libnewt`).
 
 However, the script can use both `dialog` and `whiptail` as a way to display dialog boxes, so if you want to use dialog you have to pass `-d` as a parameter.
 
