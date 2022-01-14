@@ -19,17 +19,17 @@ linkFile() {
                 exit 0
             fi
 
-            if [ $selectedOption -eq 1 ]; then
+            if [ "$selectedOption" -eq 1 ]; then
                 return
-            elif [ $selectedOption -eq 2 ]; then
+            elif [ "$selectedOption" -eq 2 ]; then
                 skip_all=true
                 return
-            elif [ $selectedOption -eq 3 ]; then
+            elif [ "$selectedOption" -eq 3 ]; then
                 ln -sf "$1" "$2"
-            elif [ $selectedOption -eq 4 ]; then
+            elif [ "$selectedOption" -eq 4 ]; then
                 overwrite_all=true
                 ln -sf "$1" "$2"
-            elif [ $selectedOption -eq 5 ]; then
+            elif [ "$selectedOption" -eq 5 ]; then
                 mv "$2" "${2}.backup"
                 ln -s "$1" "$2"
             else
@@ -45,12 +45,13 @@ linkFile() {
 
 loopThroughFiles() {
     COCORICE=$(pwd -P)
-    DOTFILES=$COCORICE/dotfiles
+    DOTFILES="$COCORICE/dotfiles"
     DOTFILES_CONFIG="$DOTFILES/.config"
     DOTFILES_LOCAL="$DOTFILES/.local"
     DOTFILES_ICONS="$DOTFILES/.icons"
     DOTFILES_SSH="$DOTFILES/.ssh"
 
+    local IFS=$'\n'
     for srcFile in $(find -H "$DOTFILES" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*' -not -path '*other*'); do
         if [ "$(basename "${srcFile}")" = "CocoRice" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
             continue
@@ -89,8 +90,8 @@ loopThroughFiles() {
     fi
 
     password=$(displayDialogBox --passwordbox "Enter your password" VALUES 3>&1 1>&2 2>&3)
-    echo $password | sudo -S bash -c "" > /dev/null 2>&1
-    echo $password | sudo -S bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox"
+    echo "$password" | sudo -S bash -c "" > /dev/null 2>&1
+    echo "$password" | sudo -S bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox"
     unset password
 }
 
@@ -100,6 +101,7 @@ runDetachedScript() {
 
     DOTFILES_OTHER=$(pwd -P)/dotfiles/other
 
+    local IFS=$'\n'
     for srcFile in $(find -H "$DOTFILES_OTHER"); do
         if [[ -d "$srcFile" ]]; then
             var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
