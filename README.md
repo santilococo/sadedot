@@ -1,4 +1,4 @@
-# CocoRice
+# sadedot
 
 Backup all your dotfiles (and easily deploy them on another machine).
 
@@ -36,7 +36,7 @@ sh scripts/bootstrap.sh -d
 ```
 to use dialog.
 
-Finally, you can run the script with `-l` if you want to print the log in the CocoRice.log file.
+Finally, you can run the script with `-l` if you want to print the log in the sadedot.log file.
 
 Note that you can modify the `scripts/install.sh` if you want to install some programs on your machine when this script is run. By default, `scripts/bootstrap.sh` will not run this script, so you will need to use the `-p` flag if you want it to run `scripts/install.sh` (it will run at the end of the `scripts/bootstrap.sh` script).
 
@@ -50,5 +50,5 @@ PRs are welcome.
 ## License <a name="license"></a>
 [MIT](https://choosealicense.com/licenses/mit/)
 
-[1]: https://github.com/santilococo/CocoRice/fork
-[2]: https://github.com/santilococo/CocoRice/tree/master/dotfiles/other
+[1]: https://github.com/santilococo/sadedot/fork
+[2]: https://github.com/santilococo/sadedot/tree/master/dotfiles/other
