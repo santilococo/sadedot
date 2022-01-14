@@ -27,7 +27,7 @@ sh scripts/bootstrap.sh
 
 By default the script will run with whiptail (`libnewt`). 
 
-However, the script can use both `dialog` and `whiptail` as a way to display dialog boxes, so if you want to use dialog you have to pass `-d` as a parameter, and if you want to use whiptail `-w`.
+However, the script can use both `dialog` and `whiptail` as a way to display dialog boxes, so if you want to use dialog you have to pass `-d` as a parameter.
 
 For example, you can run
 
@@ -35,6 +35,10 @@ For example, you can run
 sh scripts/bootstrap.sh -d
 ```
 to use dialog.
+
+Finally, you can run the script with `-l` if you want to print the log in the CocoRice.log file.
+
+Note that you can modify the `scripts/install.sh` if you want to install some programs on your machine when this script is run. By default, `scripts/bootstrap.sh` will not run this script, so you will need to use the `-p` flag if you want it to run `scripts/install.sh` (it will run at the end of the `scripts/bootstrap.sh` script). 
 
 ## Dependencies <a name="dependencies"></a>
 
