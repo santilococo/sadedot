@@ -87,11 +87,11 @@ checkForDependencies() {
         comm=$1
     fi
 
-    command -v ${comm} &> /dev/null
+    command -v "${comm}" &> /dev/null
     if [ $? -eq 1 ]; then
         unameOutput=$(uname -a | grep "arch")
-        if [ -f "/etc/arch-release" ] || [ $unameOutput -eq 0 ]; then
-            sudo pacman --noconfirm --needed -Sy ${1} 2>&1 | debug
+        if [ -f "/etc/arch-release" ] || [ "$unameOutput" -eq 0 ]; then
+            sudo pacman --noconfirm --needed -Sy "${1}" 2>&1 | debug
             if [ $? -eq 1 ]; then
                 echo "Couldn't install ${1}." >&2
                 exit 1
@@ -116,7 +116,8 @@ startRice() {
 runScript() {
     lastFolder=$(pwd -P)
     cocoRiceFolder=$(pwd -P | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
-    cd $cocoRiceFolder
+    cocoRiceFolder=marta
+    cd $cocoRiceFolder || echo "Couldn't cd into '$cocoRiceFolder'." 1>&2 && exit 1
 
     source scripts/common.sh
     checkParameters "$@"
@@ -126,7 +127,7 @@ runScript() {
     startRice
 
     clear
-    cd $lastFolder
+    cd $lastFolder || echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1
 }
 
 runScript "$@"
