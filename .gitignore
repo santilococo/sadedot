@@ -1,3 +1,4 @@
 dotfiles/.gitconfig
 dotfiles/.gitconfig-work
 shellcheck/
+.shellcheckrc

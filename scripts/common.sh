@@ -27,7 +27,7 @@ displayDialogBox() {
 }
 
 useDialog() {
-    str="${@: -1}"; inputbox=false
+    str=$(getLastArgument "$@"); inputbox=false
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
@@ -54,7 +54,7 @@ useDialog() {
 }
 
 useWhiptail() {
-    str="${@: -1}"; inputbox=false; infobox=false
+    str=$(getLastArgument "$@"); inputbox=false; infobox=false
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
@@ -82,6 +82,12 @@ useWhiptail() {
     else
         whiptail "${options[@]}"
     fi
+}
+
+getLastArgument() {
+    local i=0
+    for i; do :; done
+    echo "$i"
 }
 
 formatOptions() {
