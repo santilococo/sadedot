@@ -46,7 +46,7 @@ useDialog() {
         height=$((height+2))
     fi
     formatOptions "$@"
-    if [ $found = false ]; then
+    if [ "$found" = false ]; then
         dialog "$@" ${height} ${width}
     else
         dialog "${options[@]}"
@@ -76,7 +76,7 @@ useWhiptail() {
         height=$((height-1))
     fi
     formatOptions "$@"
-    if [ $found = false ]; then
+    if [ "$found" = false ]; then
         height=0; width=0
         whiptail "$@" ${height} ${width}
     else
