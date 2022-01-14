@@ -159,6 +159,10 @@ setDialogBox() {
     export dialogBox=${1}
 }
 
+getDialogBox() {
+    echo "$dialogBox"
+}
+
 setDebugToFile() {
     export debugFlagToFile=${1}
 }

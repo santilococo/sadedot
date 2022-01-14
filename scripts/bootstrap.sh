@@ -12,38 +12,32 @@ EOF
 
 checkParameters() {
     local counter=0
-    while getopts ':hwd' flag; do
-        if [ $((counter++)) -eq 1 ]; then
-            usage
-            exit 1
-        fi
-
+    while getopts ':hwdfp' flag; do
         case $flag in
             h)
                 usage
                 exit 0
                 ;;
-            w)
-                checkForDependencies "libnewt"
-                setDialogBox "whiptail"
-                ;;
             d)
                 checkForDependencies "dialog"
                 setDialogBox "dialog"
                 ;;
-            l)
+            f)
                 checkForDependencies "libnewt"
                 setDialogBox "whiptail"
                 setDebugToFile true
                 ;;
+            p) 
+                installPackages=true
+                ;;
             ?)
-                printf '%s: invalid option - '\''%s'\'\\n "${0##*/}" "$OPTARG"
+                printf '%s: invalid option -%s\n' "${0##*/}" "$OPTARG"
                 exit 1
                 ;;
         esac
     done
 
-    if [ $counter -eq 0 ]; then
+    if [ -z "$(getDialogBox)" ]; then
         checkForDependencies "libnewt"
         setDialogBox "whiptail"
     fi
@@ -114,7 +108,7 @@ startRice() {
     displayDialogBox --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
     source scripts/linkFiles.sh
-    source scripts/install.sh
+    [ -z $installPackages ] && source scripts/install.sh
     displayDialogBox --title "CocoRice" --msgbox "All done! Enjoy..."
 }
 

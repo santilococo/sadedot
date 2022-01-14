@@ -90,7 +90,7 @@ loopThroughFiles() {
 
     password=$(displayDialogBox --passwordbox "Enter your password" VALUES 3>&1 1>&2 2>&3)
     echo $password | sudo -S bash -c "" > /dev/null 2>&1
-    echo $password | sudo -S bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript $dialogBox"
+    echo $password | sudo -S bash -c "$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox"
     unset password
 }
 
