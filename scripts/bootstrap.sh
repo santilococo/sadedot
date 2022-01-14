@@ -6,6 +6,7 @@ usage: ${0##*/} [command]
     -h | --help         Print this help message.
     -d | --dialog       Use dialog.
     -l | --log          Log to CocoRice.log file.
+    -p | --packages     Run scripts/install.sh at the end of this script.
 EOF
 }
 
