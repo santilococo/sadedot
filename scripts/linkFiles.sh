@@ -45,7 +45,7 @@ linkFile() {
 
 loopThroughFiles() {
     SADEDOT=$(pwd -P)
-    DOTFILES="$SADEDOT/dotfiles"
+    DOTFILES="$SADEDOT/../dotfiles"
     DOTFILES_CONFIG="$DOTFILES/.config"
     DOTFILES_LOCAL="$DOTFILES/.local"
     DOTFILES_ICONS="$DOTFILES/.icons"
@@ -99,7 +99,7 @@ runDetachedScript() {
     source scripts/common.sh
     setDialogBox "$1"
 
-    DOTFILES_OTHER=$(pwd -P)/dotfiles/other
+    DOTFILES_OTHER=$(pwd -P)/../dotfiles/other
 
     local IFS=$'\n'
     for srcFile in $(find -H "$DOTFILES_OTHER"); do
