@@ -44,8 +44,8 @@ linkFile() {
 }
 
 loopThroughFiles() {
-    COCORICE=$(pwd -P)
-    DOTFILES="$COCORICE/dotfiles"
+    SADEDOT=$(pwd -P)
+    DOTFILES="$SADEDOT/dotfiles"
     DOTFILES_CONFIG="$DOTFILES/.config"
     DOTFILES_LOCAL="$DOTFILES/.local"
     DOTFILES_ICONS="$DOTFILES/.icons"
@@ -53,7 +53,7 @@ loopThroughFiles() {
 
     local IFS=$'\n'
     for srcFile in $(find -H "$DOTFILES" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*' -not -path '*other*'); do
-        if [ "$(basename "${srcFile}")" = "CocoRice" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
+        if [ "$(basename "${srcFile}")" = "sadedot" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
             continue
         fi
 
@@ -65,7 +65,7 @@ loopThroughFiles() {
     for initialFolder in "$DOTFILES_CONFIG" "$DOTFILES_ICONS" "$DOTFILES_SSH" "$DOTFILES_LOCAL"; do
         for srcFile in $(find -H "$initialFolder"); do
             if [[ -d "$srcFile" ]]; then
-                var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
+                var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\//, ""); print }')
 
                 if [[ ! -d "$HOME/$var" ]]; then
                     mkdir -p "$HOME/$var"
@@ -73,7 +73,7 @@ loopThroughFiles() {
             fi
 
             if [[ -f "$srcFile" ]]; then
-                var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\//, ""); print }')
+                var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\//, ""); print }')
                 linkFile "$srcFile" "$HOME/$var"
             fi
         done
@@ -82,7 +82,7 @@ loopThroughFiles() {
     DOTFILES_OTHER=$DOTFILES/other
 
     if [ -d "$DOTFILES_OTHER" ]; then
-        filesOutput=$(find -H "$DOTFILES_OTHER" | sed -n 2~1p | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
+        filesOutput=$(find -H "$DOTFILES_OTHER" | sed -n 2~1p | awk '{ sub(/.*sadedot\/dotfiles\/other\//, ""); print }')
         files=""; for item in $filesOutput; do
             files="${files}$item\n"
         done
@@ -104,7 +104,7 @@ runDetachedScript() {
     local IFS=$'\n'
     for srcFile in $(find -H "$DOTFILES_OTHER"); do
         if [[ -d "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
+            var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\/other\//, ""); print }')
 
             if [[ ! -d "/$var" ]]; then
                 mkdir -p "/$var"
@@ -112,7 +112,7 @@ runDetachedScript() {
         fi
 
         if [[ -f "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*CocoRice\/dotfiles\/other\//, ""); print }')
+            var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\/other\//, ""); print }')
             linkFile "$srcFile" "/$var"
         fi
     done
