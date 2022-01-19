@@ -175,5 +175,5 @@ setLogToFile() {
 }
 
 debug() {
-    [[ -z ${logToFile+x} || $logToFile = true ]] && tee -a "$logFolder/sadedot.log" > /dev/null
+    [[ -n $logToFile && $logToFile = true ]] && tee -a "$logFolder/sadedot.log" > /dev/null
 }
