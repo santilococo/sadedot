@@ -92,18 +92,22 @@ useWhiptail() {
 }
 
 usePlainText() {
-    inputbox=false; infobox=false; yesno=false
+    inputbox=false; infobox=false; passwordbox=false; yesno=false
     for item in "$@"; do
         case $item in
             --title) shift && shift ;;
             --inputbox) inputbox=true ;;
             --infobox) infobox=true ;;
+            --passwordbox) passwordbox=true ;;
             --yesno) yesno=true ;;
         esac
     done
     printf "$2\n"
     if [ $inputbox = true ]; then
         read -r readVar
+        printf "$readVar" 1>&2
+    elif [ $passwordbox = true ]; then
+        read -r -s readVar
         printf "$readVar" 1>&2
     elif [ $yesno = true ]; then
         printf "[y/n] "
