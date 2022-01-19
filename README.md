@@ -5,7 +5,7 @@ Backup all your dotfiles (and easily deploy them on another machine).
 ## Table of contents
   - [Installation <a name="installation"></a>](#installation-)
   - [Usage <a name="usage"></a>](#usage-)
-  - [Dependencies <a name="dependencies"></a>](#dependencies-)
+  - [Optional dependencies <a name="optdependencies"></a>](#optdependencies-)
   - [Updating <a name="updating"></a>](#updating-)
   - [Contributing <a name="contributing"></a>](#contributing-)
   - [License <a name="license"></a>](#license-)
@@ -42,15 +42,17 @@ For example, you can run
 ```bash
 sh scripts/bootstrap.sh -d
 ```
-to use dialog.
+to use dialog. 
+
+Also, for compatibility reasons, the script will choose not to use the `dialog` or `whiptail` if you don't have them installed. You can force this using the `-t` parameter.
 
 Finally, you can run the script with `-l` if you want to print the log in the `sadedot.log` file.
 
 Note that you can modify the `scripts/install.sh` if you want to install some programs on your machine when this script is run. By default, `scripts/bootstrap.sh` will not run this script, so you will need to use the `-p` flag if you want it to run `scripts/install.sh` (it will run at the end of the `scripts/bootstrap.sh` script).
 
-## Dependencies <a name="dependencies"></a>
+## Optional dependencies <a name="optdependencies"></a>
 
-You must install `libnewt` or `dialog`.
+You can install `libnewt` or `dialog` for a better experience, but they are not required.
 
 ## Updating <a name="updating"></a>
 
