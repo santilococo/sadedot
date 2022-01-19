@@ -5,6 +5,7 @@ usage() {
 usage: ${0##*/} [command]
     -h | --help         Print this help message.
     -d | --dialog       Use dialog.
+    -t | --text         Print plain text to stdout (without dialog or whiptail).
     -l | --log          Log to sadedot.log file.
     -p | --packages     Run scripts/install.sh at the end of this script.
 EOF
@@ -18,9 +19,11 @@ checkParameters() {
                 exit 0
                 ;;
             -d | --dialog)
-                echo "dialog"
                 checkForDependencies "dialog"
                 setDialogBox "dialog"
+                ;;
+            -t | --text)
+                setDialogBox "plain"
                 ;;
             -l | --log)
                 checkForDependencies "libnewt"
@@ -97,16 +100,15 @@ checkForDependencies() {
             return
         fi
 
-        echo "You must install ${1}." >&2
-        exit 1
+        setDialogBox "plain"
     fi
 }
 
 startRice() {
     displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
-    getGitconfigData
-    source scripts/linkFiles.sh
-    [[ -n $installPackages && $installPackages = true ]] && source scripts/install.sh
+    # getGitconfigData
+    # source scripts/linkFiles.sh
+    # [[ -n $installPackages && $installPackages = true ]] && source scripts/install.sh
     displayDialogBox --title "sadedot" --msgbox "All done! Enjoy..."
 }
 
