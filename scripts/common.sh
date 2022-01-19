@@ -91,44 +91,67 @@ useWhiptail() {
     fi
 }
 
+printLine() {
+    printf '\n\n%s' "----------------------------------------"
+}
+
 usePlainText() {
     clear
-    inputbox=false; infobox=false; passwordbox=false; yesno=false
+    inputbox=false; infobox=false; msgbox=false; passwordbox=false; yesno=false
     for item in "$@"; do
         case $item in
             --title) shift && shift ;;
             --inputbox) inputbox=true ;;
             --infobox) infobox=true ;;
+            --msgbox) msgbox=true ;;
             --passwordbox) passwordbox=true ;;
             --yesno) yesno=true ;;
         esac
     done
     printf "$2\n"
     if [ $inputbox = true ]; then
+        printLine && printf "\n"
         read -r readVar
         printf "$readVar" 1>&2
     elif [ $passwordbox = true ]; then
+        printLine && printf "\n"
         read -r -s readVar
         printf "$readVar" 1>&2
     elif [ $yesno = true ]; then
+        printLine
         printf '\n%s' "[y/n] "
         read -n 1 -r -s readVar
         return $([[ "$readVar" =~ ^[Yy]$ ]])
+    elif [ $msgbox = true ]; then
+        printLine
+        printf '\n%s' "Press a key to continue... "
+        read -n 1 -r -s
     fi
 }
 
 usePlainTextMenu() {
     clear
-    menuOptions=(); shift
-    printf "$1\n"
-    shift; shift
+    shift; printf "$1\n"; shift; shift
     local i=1; for item in "$@"; do
         echo "$item" | grep -qE '[0-9]+' && continue
         printf '%s\n' "$i) $item"
         ((i++))
     done
+    printLine
     printf '\n%s' "[1..$((i-1))] "
-    read -n 1 -r -s readVar
+    read -n ${#i} -r readVar
+    # if [[ $readVar -le 0 || $readVar -ge $i ]]; then
+    #     echo "hola"
+    # fi
+    # echo "h" $(echo "$readVar" | grep -vqE '[0-9]+')
+    # echo "i" $([[ $readVar -le 0 || $readVar -ge $i ]])
+    while echo "$readVar" | grep -vqE '[0-9]+' || [[ $readVar -le 0 || $readVar -ge $i ]]; do
+        printf "\033[A"
+        printf '\n%s' "You need to choose a number between 1 and $((i-1))"
+        printf '\n%s' "[1..$((i-1))] "
+        read -n 1 -r -s readVar
+    done
+    printf "\n"
     printf "$readVar" 1>&2
 }
 

@@ -105,7 +105,10 @@ checkForDependencies() {
 }
 
 startRice() {
+    selectedOption=$(displayDialogBox --menu "File already exists: $(basename "$1"), what would you like to do?" VALUES 0 1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all" 3>&1 1>&2 2>&3)
+    gitWorkName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
     displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
+    displayDialogBox --yesno "Would you like to set up gitconfig?" || return
     # getGitconfigData
     # source scripts/linkFiles.sh
     # [[ -n $installPackages && $installPackages = true ]] && source scripts/install.sh
