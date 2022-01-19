@@ -60,7 +60,7 @@ PRs are welcome.
 To keep the submodule up to date, you need to run
 
 ```bash
-sh sadedot/scripts/update.sh
+sh scripts/update.sh
 ```
 
 ## License <a name="license"></a>
