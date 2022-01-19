@@ -7,11 +7,19 @@ Backup all your dotfiles (and easily deploy them on another machine).
   - [Usage <a name="usage"></a>](#usage-)
   - [Dependencies <a name="dependencies"></a>](#dependencies-)
   - [Contributing <a name="contributing"></a>](#contributing-)
+  - [Updating <a name="updating"></a>](#updating-)
   - [License <a name="license"></a>](#license-)
 
 ## Installation <a name="installation"></a>
 
-[Fork][1] this repository.
+This repo is supposed to be used as a submodule. So, if you already have a git repo with your dotfiles:
+
+```bash
+git submodule add git@github.com:santilococo/sadedot.git
+git submodule update --init
+```
+
+And if you don't, you can [fork][1] my dotfiles repo on github.
 
 ## Usage <a name="usage"></a>
 
@@ -47,8 +55,16 @@ You must install `libnewt` or `dialog`.
 ## Contributing <a name="contributing"></a>
 PRs are welcome.
 
-## License <a name="license"></a>
-[MIT](https://choosealicense.com/licenses/mit/)
+## Updating <a name="updating"></a>
 
-[1]: https://github.com/santilococo/sadedot/fork
-[2]: https://github.com/santilococo/sadedot/tree/master/dotfiles/other
+To keep the submodule up to date, you need to run
+
+```bash
+sh sadedot/scripts/update.sh
+```
+
+## License <a name="license"></a>
+[MIT](https://raw.githubusercontent.com/santilococo/sadedot/master/LICENSE.md)
+
+[1]: https://github.com/santilococo/dotfiles/fork
+[2]: https://github.com/santilococo/dotfiles/tree/master/dotfiles/other
