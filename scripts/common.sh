@@ -140,11 +140,6 @@ usePlainTextMenu() {
     printLine
     printf '\n%s' "[1..$((i-1))] "
     read -n ${#i} -r readVar
-    # if [[ $readVar -le 0 || $readVar -ge $i ]]; then
-    #     echo "hola"
-    # fi
-    # echo "h" $(echo "$readVar" | grep -vqE '[0-9]+')
-    # echo "i" $([[ $readVar -le 0 || $readVar -ge $i ]])
     while echo "$readVar" | grep -vqE '[0-9]+' || [[ $readVar -le 0 || $readVar -ge $i ]]; do
         printf "\033[A"
         printf '\n%s' "You need to choose a number between 1 and $((i-1))"
