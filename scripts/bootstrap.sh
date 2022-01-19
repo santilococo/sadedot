@@ -92,7 +92,7 @@ checkForDependencies() {
     if [ $? -eq 1 ]; then
         unameOutput=$(uname -a | grep "arch")
         if [ -f "/etc/arch-release" ] || [ "$unameOutput" -eq 0 ]; then
-            sudo pacman --noconfirm --needed -Sy "${1}" 2>&1 | debug
+            sudo pacman --noconfirm --needed -Sy "${1}"
             if [ $? -eq 1 ]; then
                 echo "Couldn't install ${1}." >&2
                 exit 1
