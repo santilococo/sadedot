@@ -25,7 +25,7 @@ checkParameters() {
             -l | --log)
                 checkForDependencies "libnewt"
                 setDialogBox "whiptail"
-                setLogToFile true
+                setLogToFile true "$(pwd -P)"
                 ;;
             -p | --packages) 
                 installPackages=true

@@ -171,8 +171,9 @@ getDialogBox() {
 
 setLogToFile() {
     export logToFile=${1}
+    export logFolder=${2}
 }
 
 debug() {
-    [[ -z ${logToFile+x} || $logToFile = true ]] && tee -a sadedot.log > /dev/null
+    [[ -z ${logToFile+x} || $logToFile = true ]] && tee -a "$logFolder/sadedot.log" > /dev/null
 }
