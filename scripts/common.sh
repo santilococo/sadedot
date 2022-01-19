@@ -92,6 +92,7 @@ useWhiptail() {
 }
 
 usePlainText() {
+    clear
     inputbox=false; infobox=false; passwordbox=false; yesno=false
     for item in "$@"; do
         case $item in
@@ -110,13 +111,14 @@ usePlainText() {
         read -r -s readVar
         printf "$readVar" 1>&2
     elif [ $yesno = true ]; then
-        printf "[y/n] "
-        read -n 1 -r readVar
+        printf '\n%s' "[y/n] "
+        read -n 1 -r -s readVar
         return $([[ "$readVar" =~ ^[Yy]$ ]])
     fi
 }
 
 usePlainTextMenu() {
+    clear
     menuOptions=(); shift
     printf "$1\n"
     shift; shift
@@ -125,7 +127,8 @@ usePlainTextMenu() {
         printf '%s\n' "$i) $item"
         ((i++))
     done
-    read -n 1 -r readVar
+    printf '\n%s' "[1..$((i-1))] "
+    read -n 1 -r -s readVar
     printf "$readVar" 1>&2
 }
 
