@@ -110,7 +110,7 @@ startRice() {
     displayDialogBox --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
     source scripts/linkFiles.sh
-    [ -z $installPackages ] && source scripts/install.sh
+    [[ -n $installPackages && $installPackages = true ]] && source scripts/install.sh
     displayDialogBox --title "CocoRice" --msgbox "All done! Enjoy..."
 }
 
