@@ -6,8 +6,8 @@ Backup all your dotfiles (and easily deploy them on another machine).
   - [Installation <a name="installation"></a>](#installation-)
   - [Usage <a name="usage"></a>](#usage-)
   - [Dependencies <a name="dependencies"></a>](#dependencies-)
-  - [Contributing <a name="contributing"></a>](#contributing-)
   - [Updating <a name="updating"></a>](#updating-)
+  - [Contributing <a name="contributing"></a>](#contributing-)
   - [License <a name="license"></a>](#license-)
 
 ## Installation <a name="installation"></a>
@@ -52,9 +52,6 @@ Note that you can modify the `scripts/install.sh` if you want to install some pr
 
 You must install `libnewt` or `dialog`.
 
-## Contributing <a name="contributing"></a>
-PRs are welcome.
-
 ## Updating <a name="updating"></a>
 
 To keep the submodule up to date, you need to run
@@ -62,6 +59,9 @@ To keep the submodule up to date, you need to run
 ```bash
 git submodule foreach git pull
 ```
+
+## Contributing <a name="contributing"></a>
+PRs are welcome.
 
 ## License <a name="license"></a>
 [MIT](https://raw.githubusercontent.com/santilococo/sadedot/master/LICENSE.md)
