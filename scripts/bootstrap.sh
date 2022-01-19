@@ -5,7 +5,7 @@ usage() {
 usage: ${0##*/} [command]
     -h | --help         Print this help message.
     -d | --dialog       Use dialog.
-    -l | --log          Log to CocoRice.log file.
+    -l | --log          Log to sadedot.log file.
     -p | --packages     Run scripts/install.sh at the end of this script.
 EOF
 }
@@ -107,16 +107,16 @@ checkForDependencies() {
 }
 
 startRice() {
-    displayDialogBox --title "CocoRice" --msgbox "Hi! This script will auto install my dotfiles."
+    displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
     source scripts/linkFiles.sh
     [[ -n $installPackages && $installPackages = true ]] && source scripts/install.sh
-    displayDialogBox --title "CocoRice" --msgbox "All done! Enjoy..."
+    displayDialogBox --title "sadedot" --msgbox "All done! Enjoy..."
 }
 
 runScript() {
     lastFolder=$(pwd -P)
-    sadedotFolder=$(pwd -P | awk '{ sub(/CocoRice.*/, "CocoRice"); print }')
+    sadedotFolder=$(pwd -P | awk '{ sub(/sadedot.*/, "sadedot"); print }')
     cd "$sadedotFolder" || { echo "Couldn't cd into '$sadedotFolder'." 1>&2 && exit 1; }
 
     source scripts/common.sh
