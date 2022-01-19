@@ -45,15 +45,15 @@ linkFile() {
 
 loopThroughFiles() {
     SADEDOT=$(pwd -P)
-    DOTFILES="$SADEDOT/../dotfiles"
+    DOTFILES="$SADEDOT/dotfiles"
     DOTFILES_CONFIG="$DOTFILES/.config"
     DOTFILES_LOCAL="$DOTFILES/.local"
     DOTFILES_ICONS="$DOTFILES/.icons"
     DOTFILES_SSH="$DOTFILES/.ssh"
 
     local IFS=$'\n'
-    for srcFile in $(find -H "$DOTFILES" -not -path '*.git' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*' -not -path '*other*'); do
-        if [ "$(basename "${srcFile}")" = "sadedot" ] || [ "$(basename "${srcFile}")" = "dotfiles" ]; then
+    for srcFile in $(find -H "$DOTFILES" -not -path '*.git*' -not -path '*.config*' -not -path '*.ssh*' -not -path '*.icons*' -not -path '*.local*' -not -path '*other*'); do
+        if [ "$(basename "${srcFile}")" = "dotfiles" ]; then
             continue
         fi
 
@@ -99,7 +99,7 @@ runDetachedScript() {
     source scripts/common.sh
     setDialogBox "$1"
 
-    DOTFILES_OTHER=$(pwd -P)/../dotfiles/other
+    DOTFILES_OTHER=$(pwd -P)/dotfiles/other
 
     local IFS=$'\n'
     for srcFile in $(find -H "$DOTFILES_OTHER"); do
@@ -119,7 +119,12 @@ runDetachedScript() {
 }
 
 runScript() {
+    lastFolder=$(pwd -P)
+    cd .. || { echo "Couldn't cd into parent folder." 1>&2 && exit 1; }
+
     loopThroughFiles
+
+    cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
 }
 
 runScript
