@@ -19,6 +19,13 @@ displayDialogBox() {
                 useDialog "$@"
             fi
             ;;
+        plain)
+            if [ "$1" = "--menu" ]; then
+                usePlainTextMenu "$@"
+            else
+                usePlainText "$@"
+            fi
+            ;;
         ?)
             echo "Unknown dialogBox variable" >&2
             exit 1
@@ -82,6 +89,39 @@ useWhiptail() {
     else
         whiptail "${options[@]}"
     fi
+}
+
+usePlainText() {
+    inputbox=false; infobox=false; yesnobox=false
+    for item in "$@"; do
+        # TODO: Use case
+        [ "$item" = "--title" ] && shift && shift
+        [ "$item" = "--inputbox" ] && inputbox=true
+        [ "$item" = "--infobox" ] && infobox=true
+        [ "$item" = "--yesno" ] && yesnobox=true
+    done
+    printf "$2\n"
+    if [ $inputbox = true ]; then
+        read -r readVar
+        printf "$readVar"
+    elif [ $yesnobox = true ]; then
+        printf "[y/n] "
+        read -n 1 -r readVar
+        return $([[ "$readVar" =~ ^[Yy]$ ]])
+    fi
+}
+
+usePlainTextMenu() {
+    menuOptions=(); shift
+    printf "$1\n"
+    shift; shift
+    local i=1; for item in "$@"; do
+        echo "$item" | grep -qE '[0-9]+' && continue
+        printf '%s\n' "$i) $item"
+        ((i++))
+    done
+    read -n 1 -r readVar
+    echo "$readVar"
 }
 
 getLastArgument() {
