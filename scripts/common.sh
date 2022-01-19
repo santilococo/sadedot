@@ -103,7 +103,7 @@ usePlainText() {
     printf "$2\n"
     if [ $inputbox = true ]; then
         read -r readVar
-        printf "$readVar"
+        printf "$readVar" 1>&2
     elif [ $yesnobox = true ]; then
         printf "[y/n] "
         read -n 1 -r readVar
@@ -121,7 +121,7 @@ usePlainTextMenu() {
         ((i++))
     done
     read -n 1 -r readVar
-    echo "$readVar"
+    printf "$readVar" 1>&2
 }
 
 getLastArgument() {
