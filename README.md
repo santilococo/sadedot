@@ -23,7 +23,7 @@ And if you don't, you can [fork][1] my dotfiles repo on github.
 
 ## Usage <a name="usage"></a>
 
-You have to move all your dotfiles to the dotfiles folder and then the script will do the symbolic links. Doing it this way, you can now upload them to your repository (to have a backup of them).
+You have to move all your dotfiles to a dotfiles folder (check [my repo][3] for an example) and then the script will do the symbolic links. Doing it this way, you can now upload them to your repository (to have a backup of them).
 
 You should note that all these dotfiles (files or folders) will be symlinked in `$HOME`. So, if you want to symlink, for example, something in `/etc`, you have to put it in the `dotfiles/other` folder. Here you have to be careful as they will be installed in `/`. You can see an example [here][2].
 
@@ -70,3 +70,4 @@ PRs are welcome.
 
 [1]: https://github.com/santilococo/dotfiles/fork
 [2]: https://github.com/santilococo/dotfiles/tree/master/dotfiles/other
+[3]: https://github.com/santilococo/dotfiles
