@@ -60,7 +60,7 @@ PRs are welcome.
 To keep the submodule up to date, you need to run
 
 ```bash
-sh scripts/update.sh
+git submodule foreach git pull
 ```
 
 ## License <a name="license"></a>
