@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 cloneAndMake() {
-    if [ -z $password ]; then
+    if [ -z "$password" ]; then
         password=$(displayDialogBox --passwordbox "Enter your password" VALUES 3>&1 1>&2 2>&3)
         echo "$password" | sudo -S bash -c "" > /dev/null 2>&1
     fi
