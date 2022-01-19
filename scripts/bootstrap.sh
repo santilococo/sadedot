@@ -82,11 +82,7 @@ getGitconfigData() {
 }
 
 checkForDependencies() {
-    if [ "$1" = "libnewt" ]; then
-        comm=whiptail
-    else
-        comm=$1
-    fi
+    comm=$1 && [ "$1" = "libnewt" ] && comm=whiptail
 
     command -v "${comm}" &> /dev/null
     if [ $? -eq 1 ]; then
