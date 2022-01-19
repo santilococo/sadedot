@@ -92,19 +92,20 @@ useWhiptail() {
 }
 
 usePlainText() {
-    inputbox=false; infobox=false; yesnobox=false
+    inputbox=false; infobox=false; yesno=false
     for item in "$@"; do
-        # TODO: Use case
-        [ "$item" = "--title" ] && shift && shift
-        [ "$item" = "--inputbox" ] && inputbox=true
-        [ "$item" = "--infobox" ] && infobox=true
-        [ "$item" = "--yesno" ] && yesnobox=true
+        case $item in
+            --title) shift && shift ;;
+            --inputbox) inputbox=true ;;
+            --infobox) infobox=true ;;
+            --yesno) yesno=true ;;
+        esac
     done
     printf "$2\n"
     if [ $inputbox = true ]; then
         read -r readVar
         printf "$readVar" 1>&2
-    elif [ $yesnobox = true ]; then
+    elif [ $yesno = true ]; then
         printf "[y/n] "
         read -n 1 -r readVar
         return $([[ "$readVar" =~ ^[Yy]$ ]])
