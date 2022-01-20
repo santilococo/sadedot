@@ -23,9 +23,9 @@ And if you don't, you can [fork][1] my dotfiles repo on github.
 
 ## Usage <a name="usage"></a>
 
-You have to move all your dotfiles to a dotfiles folder (check [my repo][3] for an example) and then the script will do the symbolic links. Doing it this way, you can now upload them to your repository (to have a backup of them).
+You have to move all your dotfiles to a folder named `dotfiles` (see [my repo][3] for an example) and then the script will do the symbolic links. Doing it this way, you can now push them to your github repo (so you have a backup of them).
 
-You should note that all these dotfiles (files or folders) will be symlinked in `$HOME`. So, if you want to symlink, for example, something in `/etc`, you have to put it in the `dotfiles/other` folder. Here you have to be careful as they will be installed in `/`. You can see an example [here][2].
+You should note that all of these dotfiles (files or folders) will be symlinked in `$HOME`. So, if you want to symlink, for example, something in `/etc`, you have to put it in the `dotfiles/other` folder. Here you have to be careful as they will be installed in `/`. You can see an example [here][2].
 
 So, to run the script:
 
@@ -33,22 +33,24 @@ So, to run the script:
 sh scripts/bootstrap.sh
 ```
 
-By default the script will run with whiptail (`libnewt`).
+By default, the script will run with whiptail (`libnewt`). However, the script can use either `dialog` or `whiptail` as a way to display dialog boxes, so if you want to use dialog, you must pass `-d` as a parameter.
 
-However, the script can use both `dialog` and `whiptail` as a way to display dialog boxes, so if you want to use dialog you have to pass `-d` as a parameter.
+Also, for compatibility reasons, the script will choose not to use `dialog` or `whiptail` if you don't have them installed. You can force this using the `-t` parameter.
 
-For example, you can run
+Finally, you can run the script with `-l` if you want to print the log to the `sadedot.log` file (it will be created inside the `sadedot` folder).
 
-```bash
-sh scripts/bootstrap.sh -d
+Note that you can add shell scripts to a folder named `scripts` (see [my repo][3]) if you want to run them when `scripts/bootstrap.sh` is run. By default, it will not run these scripts, so you must use the `-p` flag (they will run at the end of the script).
+
+As an example, I will show [my repo][3] directories in a tree-like format (note that the folder named `sadedot` is this repository as a submodule):
 ```
-to use dialog. 
-
-Also, for compatibility reasons, the script will choose not to use the `dialog` or `whiptail` if you don't have them installed. You can force this using the `-t` parameter.
-
-Finally, you can run the script with `-l` if you want to print the log in the `sadedot.log` file.
-
-Note that you can modify the `scripts/install.sh` if you want to install some programs on your machine when this script is run. By default, `scripts/bootstrap.sh` will not run this script, so you will need to use the `-p` flag if you want it to run `scripts/install.sh` (it will run at the end of the `scripts/bootstrap.sh` script).
+.
+├── dotfiles
+│   └── ...
+├── sadedot
+│   └── ...
+└── scripts
+    └── ...
+```
 
 ## Optional dependencies <a name="optdependencies"></a>
 
