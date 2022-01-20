@@ -2,3 +2,4 @@ dotfiles/.gitconfig
 dotfiles/.gitconfig-work
 shellcheck/
 .shellcheckrc
+sadedot.log
