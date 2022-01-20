@@ -109,10 +109,10 @@ startRice() {
     getGitconfigData
     source scripts/linkFiles.sh
     if [[ -n $runUserScripts && $runUserScripts = true ]]; then
-        local lastFolder=$(pwd -P)
+        lastFolder=$(pwd -P)
         cd .. || { echo "Couldn't cd into parent folder." 1>&2 && exit 1; }
         for script in $(find -H scripts -type f); do
-            source $script
+            source "$script"
         done
         cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
     fi
