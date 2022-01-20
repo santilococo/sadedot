@@ -65,7 +65,7 @@ loopThroughFiles() {
     for initialFolder in "$DOTFILES_CONFIG" "$DOTFILES_ICONS" "$DOTFILES_SSH" "$DOTFILES_LOCAL"; do
         for srcFile in $(find -H "$initialFolder"); do
             if [[ -d "$srcFile" ]]; then
-                var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\//, ""); print }')
+                var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\//, ""); print }')
 
                 if [[ ! -d "$HOME/$var" ]]; then
                     mkdir -p "$HOME/$var"
@@ -73,7 +73,7 @@ loopThroughFiles() {
             fi
 
             if [[ -f "$srcFile" ]]; then
-                var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\//, ""); print }')
+                var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\//, ""); print }')
                 linkFile "$srcFile" "$HOME/$var"
             fi
         done
@@ -82,7 +82,7 @@ loopThroughFiles() {
     DOTFILES_OTHER=$DOTFILES/other
 
     if [ -d "$DOTFILES_OTHER" ]; then
-        filesOutput=$(find -H "$DOTFILES_OTHER" | sed -n 2~1p | awk '{ sub(/.*sadedot\/dotfiles\/other\//, ""); print }')
+        filesOutput=$(find -H "$DOTFILES_OTHER" | sed -n 2~1p | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
         files=""; for item in $filesOutput; do
             files="${files}$item\n"
         done
@@ -104,7 +104,7 @@ runDetachedScript() {
     local IFS=$'\n'
     for srcFile in $(find -H "$DOTFILES_OTHER"); do
         if [[ -d "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\/other\//, ""); print }')
+            var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
 
             if [[ ! -d "/$var" ]]; then
                 mkdir -p "/$var"
@@ -112,7 +112,7 @@ runDetachedScript() {
         fi
 
         if [[ -f "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*sadedot\/dotfiles\/other\//, ""); print }')
+            var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
             linkFile "$srcFile" "/$var"
         fi
     done
