@@ -30,8 +30,8 @@ checkParameters() {
                 setDialogBox "whiptail"
                 setLogToFile true "$(pwd -P)"
                 ;;
-            -p | --packages) 
-                runUserScripts=true
+            -p | --packages)
+                userScriptsFlag=true
                 ;;
             *)
                 printf '%s: invalid option %s\n' "${0##*/}" "$1"
@@ -104,11 +104,8 @@ checkForDependencies() {
     fi
 }
 
-startRice() {
-    displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
-    getGitconfigData
-    source scripts/linkFiles.sh
-    if [[ -n $runUserScripts && $runUserScripts = true ]]; then
+runUserScripts() {
+    if [[ -n $userScriptsFlag && $userScriptsFlag = true ]]; then
         lastFolder=$(pwd -P)
         cd .. || { echo "Couldn't cd into parent folder." 1>&2 && exit 1; }
         for script in $(find -H scripts -type f); do
@@ -116,6 +113,13 @@ startRice() {
         done
         cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
     fi
+}
+
+startRice() {
+    displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
+    getGitconfigData
+    source scripts/linkFiles.sh
+    runUserScripts
     displayDialogBox --title "sadedot" --msgbox "All done! Enjoy..."
 }
 
