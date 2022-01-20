@@ -121,7 +121,13 @@ usePlainText() {
         printLine
         printf '\n%s' "[y/n] "
         read -n 1 -r -s readVar
-        return $([[ "$readVar" =~ ^[Yy]$ ]])
+        while echo "$readVar" | grep -vqE '[yYnN]'; do
+            printf "\033[A"
+            printf '\n%s' "You need to type 'y' or 'n'"
+            printf '\n%s' "[y/n] "
+            read -n 1 -r -s readVar
+        done
+        [[ "$readVar" =~ ^[Yy]$ ]] && return 0 || return 1
     elif [ $msgbox = true ]; then
         printLine
         printf '\n%s' "Press a key to continue... "
