@@ -31,7 +31,7 @@ checkParameters() {
                 setLogToFile true "$(pwd -P)"
                 ;;
             -p | --packages) 
-                installPackages=true
+                runUserScripts=true
                 ;;
             *)
                 printf '%s: invalid option %s\n' "${0##*/}" "$1"
@@ -108,7 +108,14 @@ startRice() {
     displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
     source scripts/linkFiles.sh
-    [[ -n $installPackages && $installPackages = true ]] && source scripts/install.sh
+    if [[ -n $runUserScripts && $runUserScripts = true ]]; then
+        local lastFolder=$(pwd -P)
+        cd .. || { echo "Couldn't cd into parent folder." 1>&2 && exit 1; }
+        for script in $(find -H scripts -type f); do
+            source $script
+        done
+        cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
+    fi
     displayDialogBox --title "sadedot" --msgbox "All done! Enjoy..."
 }
 
