@@ -76,7 +76,7 @@ loopThroughFiles() {
     done
 
     if [ -d "$DOTFILES/other" ]; then
-        filesOutput=$(find -H "$DOTFILES/other" | sed -n 2~1p | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
+        filesOutput=$(find -H "$DOTFILES/other" -mindepth 1 | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
         files=""; for item in $filesOutput; do
             files="${files}$item\n"
         done
