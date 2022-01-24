@@ -108,9 +108,14 @@ runUserScripts() {
     if [[ -n $userScriptsFlag && $userScriptsFlag = true ]]; then
         lastFolder=$(pwd -P)
         cd .. || { echo "Couldn't cd into parent folder." 1>&2 && exit 1; }
-        for script in $(find -H scripts -type f); do
+
+        local IFS=
+        while read -r -d '' script; do
             source "$script"
-        done
+        done < <(find -H scripts -type f -print0)
+
+        # find -H scripts -type f -exec sh -c 'echo "2 source $1"' -sh {} \;
+
         cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
     fi
 }
