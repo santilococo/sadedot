@@ -78,7 +78,7 @@ loopThroughFiles() {
     if [ -d "$DOTFILES/other" ]; then
         files=""
         while read -r -d '' item; do
-            item=$(echo $item | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
+            item=$(echo "$item" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
             files="${files}$item\n"
         done < <(find -H "$DOTFILES/other" -mindepth 1 -type f -print0)
         displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n${files}" || return
@@ -91,7 +91,7 @@ loopThroughFiles() {
 }
 
 runDetachedScript() {
-    source scripts/common.sh
+    source sadedot/scripts/common.sh
     setDialogBox "$1"
 
     SADEDOT=$(pwd -P)
