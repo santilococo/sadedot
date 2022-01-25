@@ -114,8 +114,6 @@ runUserScripts() {
             source "$script"
         done < <(find -H scripts -type f -print0)
 
-        # find -H scripts -type f -exec sh -c 'echo "2 source $1"' -sh {} \;
-
         cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
     fi
 }
