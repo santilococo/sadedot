@@ -47,8 +47,8 @@ loopThroughFiles() {
     SADEDOT=$(pwd -P)
     DOTFILES="$SADEDOT/dotfiles"
 
-    local IFS=$'\n'
-    for srcFile in $(find -H "$DOTFILES" -maxdepth 1 -type f); do
+    local IFS=
+    while read -r -d '' srcFile; do
         if [ "$(basename "${srcFile}")" = "dotfiles" ]; then
             continue
         fi
@@ -56,10 +56,10 @@ loopThroughFiles() {
         if [[ -f "$srcFile" ]]; then
             linkFile "$srcFile" "$HOME/$(basename "${srcFile}")"
         fi
-    done
+    done < <(find -H "$DOTFILES" -maxdepth 1 -type f -print0)
 
-    for initialFolder in $(find -H "$DOTFILES" -maxdepth 1 -mindepth 1 -type d -not -path '*other*'); do
-        for srcFile in $(find -H "$initialFolder"); do
+    while read -r -d '' initialFolder; do
+        while read -r -d '' srcFile; do
             if [[ -d "$srcFile" ]]; then
                 var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\//, ""); print }')
 
@@ -72,14 +72,15 @@ loopThroughFiles() {
                 var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\//, ""); print }')
                 linkFile "$srcFile" "$HOME/$var"
             fi
-        done
-    done
+        done < <(find -H "$initialFolder" -print0)
+    done < <(find -H "$DOTFILES" -maxdepth 1 -mindepth 1 -type d -not -path '*other*' -print0)
 
     if [ -d "$DOTFILES/other" ]; then
-        filesOutput=$(find -H "$DOTFILES/other" -mindepth 1 | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
-        files=""; for item in $filesOutput; do
+        files=""
+        while read -r -d '' item; do
+            item=$(echo $item | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
             files="${files}$item\n"
-        done
+        done < <(find -H "$DOTFILES/other" -mindepth 1 -type f -print0)
         displayDialogBox --yesno "There are 'other' files, would you like to install them?\n\n${files}" || return
     fi
 
@@ -96,8 +97,8 @@ runDetachedScript() {
     SADEDOT=$(pwd -P)
     DOTFILES="$SADEDOT/dotfiles"
 
-    local IFS=$'\n'
-    for srcFile in $(find -H "$DOTFILES/other" -mindepth 1); do
+    local IFS=
+    while read -r -d '' srcFile; do
         if [[ -d "$srcFile" ]]; then
             var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
 
@@ -110,7 +111,7 @@ runDetachedScript() {
             var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
             linkFile "$srcFile" "/$var"
         fi
-    done
+    done < <(find -H "$DOTFILES/other" -mindepth 1 -print0)
 }
 
 runScript() {
