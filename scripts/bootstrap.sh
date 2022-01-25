@@ -132,8 +132,8 @@ runUserScripts() {
 startRice() {
     displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
     getGitconfigData
-    # source scripts/linkFiles.sh
-    # runUserScripts
+    source scripts/linkFiles.sh
+    runUserScripts
     displayDialogBox --title "sadedot" --msgbox "All done! Enjoy..."
 }
 
