@@ -196,7 +196,7 @@ calcWidthWhiptail() {
 calcWidthDialog() {
     str=$1; count=1; found=false; option=1
     for (( i = 0; i < ${#str}; i++ )); do
-        if [ "${str:$i:1}" = '\' ] && [ "${str:$((i+1)):1}" = 'n' ]; then
+        if [ "${str:$i:1}" = "\\" ] && [ "${str:$((i+1)):1}" = "n" ]; then
             if [ $count -ge $option ]; then
                 option=$count
             fi
