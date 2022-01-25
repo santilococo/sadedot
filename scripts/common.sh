@@ -232,6 +232,14 @@ calcHeightDialog() {
     echo $((4+height))
 }
 
+checkCancel() {
+    if [ $? -eq 1 ]; then
+        displayDialogBox --msgbox "$1" VALUES
+        return 0
+    fi
+    return 1
+}
+
 setDialogBox() {
     export dialogBox=${1}
 }
