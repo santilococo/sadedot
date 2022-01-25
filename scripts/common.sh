@@ -213,23 +213,22 @@ calcWidthDialog() {
     fi
 }
 
-calcHeightWhiptail() {
+calcHeight() {
     newlines=$(printf "$1" | grep -c $'\n')
     chars=$(echo "$1" | wc -c)
     height=$(echo "$chars" "$newlines" | awk '{
         x = (($1 - $2 + ($2 * 60)) / 60)
         printf "%d", (x == int(x)) ? x : int(x) + 1
     }')
+}
+
+calcHeightWhiptail() {
+    calcHeight "$@"
     echo $((6+height))
 }
 
 calcHeightDialog() {
-    newlines=$(printf "$1" | grep -c $'\n')
-    chars=$(echo "$1" | wc -c)
-    height=$(echo "$chars" "$newlines" | awk '{
-        x = (($1 - $2 + ($2 * 60)) / 60)
-        printf "%d", (x == int(x)) ? x : int(x) + 1
-    }')
+    calcHeight "$@"
     echo $((4+height))
 }
 
