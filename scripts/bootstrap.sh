@@ -142,6 +142,8 @@ runScript() {
     sadedotFolder=$(pwd -P | awk '{ sub(/sadedot.*/, "sadedot"); print }')
     cd "$sadedotFolder" || { echo "Couldn't cd into '$sadedotFolder'." 1>&2 && exit 1; }
 
+    [[ "$(basename $sadedotFolder)" != "sadedot" ]] && cd sadedot
+
     source scripts/common.sh
     checkParameters "$@"
     clear
