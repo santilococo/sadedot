@@ -148,6 +148,4 @@ runScript() {
     cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
 }
 
-# runScript "$@"
-checkForDependencies "whip"
-exit $?
+runScript "$@"
