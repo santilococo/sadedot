@@ -19,15 +19,13 @@ checkParameters() {
                 exit 0
                 ;;
             -w | --whiptail)
-                checkForDependencies "libnewt"
-                setDialogBox "whiptail"
+                checkForDependencies "libnewt" && setDialogBox "whiptail"
                 ;;
             -t | --text)
                 setDialogBox "plain"
                 ;;
             -l | --log)
-                checkForDependencies "dialog"
-                setDialogBox "dialog"
+                checkForDependencies "dialog" && setDialogBox "dialog"
                 setLogToFile true "$(pwd -P)"
                 ;;
             -p | --packages)
@@ -42,8 +40,7 @@ checkParameters() {
     done
 
     if [ -z "$(getDialogBox)" ]; then
-        checkForDependencies "dialog"
-        setDialogBox "dialog"
+        checkForDependencies "dialog" && setDialogBox "dialog"
     fi
 }
 
@@ -101,18 +98,15 @@ checkForDependencies() {
     command -v "${comm}" &> /dev/null
     if [ $? -eq 1 ]; then
         unameOutput=$(uname -a | grep "arch")
-        if [ -f "/etc/arch-release" ] || [ "$unameOutput" -eq 0 ]; then
-            sudo pacman --noconfirm --needed -Sy "${1}"
-            if [ $? -eq 1 ]; then
-                echo "Couldn't install ${1}." >&2
-                exit 1
-            fi
-
-            return
+        [ ! -f "/etc/arch-release" ] && [ "$unameOutput" -ne 0 ] && return 1
+        sudo pacman --noconfirm --needed -Sy "${1}"
+        if [ $? -eq 1 ]; then
+            echo "Couldn't install ${1}." >&2
+            exit 1
         fi
-
-        setDialogBox "plain"
     fi
+
+    return 0
 }
 
 runUserScripts() {
@@ -154,4 +148,6 @@ runScript() {
     cd "$lastFolder" || { echo "Couldn't cd into '$lastFolder'." 1>&2 && exit 1; }
 }
 
-runScript "$@"
+# runScript "$@"
+checkForDependencies "whip"
+exit $?
