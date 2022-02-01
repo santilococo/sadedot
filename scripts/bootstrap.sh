@@ -4,7 +4,7 @@ usage() {
   cat << EOF
 usage: ${0##*/} [command]
     -h | --help         Print this help message.
-    -d | --dialog       Use dialog.
+    -w | --whiptail     Use whiptail.
     -t | --text         Print plain text to stdout (without dialog or whiptail).
     -l | --log          Log to sadedot.log file.
     -p | --packages     Run scripts/install.sh at the end of this script.
@@ -18,16 +18,16 @@ checkParameters() {
                 usage
                 exit 0
                 ;;
-            -d | --dialog)
-                checkForDependencies "dialog"
-                setDialogBox "dialog"
+            -w | --whiptail)
+                checkForDependencies "libnewt"
+                setDialogBox "whiptail"
                 ;;
             -t | --text)
                 setDialogBox "plain"
                 ;;
             -l | --log)
-                checkForDependencies "libnewt"
-                setDialogBox "whiptail"
+                checkForDependencies "dialog"
+                setDialogBox "dialog"
                 setLogToFile true "$(pwd -P)"
                 ;;
             -p | --packages)
@@ -42,8 +42,8 @@ checkParameters() {
     done
 
     if [ -z "$(getDialogBox)" ]; then
-        checkForDependencies "libnewt"
-        setDialogBox "whiptail"
+        checkForDependencies "dialog"
+        setDialogBox "dialog"
     fi
 }
 
