@@ -104,7 +104,8 @@ usePlainText() {
             --yesno) yesno=true ;;
         esac
     done
-    printf "$2\n"
+    str="${2:2}"
+    printf "$str\n"
     if [ $inputbox = true ]; then
         printLine && printf "\n"
         read -r readVar
