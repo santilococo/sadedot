@@ -48,46 +48,46 @@ checkParameters() {
 }
 
 getGitconfigData() {
-    displayDialogBox --yesno "Would you like to set up gitconfig?" || return
+    displayDialogBox --yesno "\nWould you like to set up gitconfig?" || return
 
-    displayDialogBox --msgbox "Now, I will ask you for data to set up gitconfig personal account."
-    gitPersonalName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+    displayDialogBox --msgbox "\nNow, I will ask you for data to set up gitconfig personal account."
+    gitPersonalName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
     checkCancel "You must enter a name." && return
-    gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
+    gitPersonalMail=$(displayDialogBox --inputbox "\nEnter an e-mail." VALUES 3>&1 1>&2 2>&3)
     checkCancel "You must enter an e-mail." && return
 
     while true; do
-        displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitPersonalName}\n - E-mail: ${gitPersonalMail}" && break
-        gitPersonalName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+        displayDialogBox --yesno "\nPlease confirm that the data you entered is correct:\n\n - Name: ${gitPersonalName}\n - E-mail: ${gitPersonalMail}" && break
+        gitPersonalName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a name." && return
-        gitPersonalMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
+        gitPersonalMail=$(displayDialogBox --inputbox "\nEnter an e-mail." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter an e-mail." && return
     done
     
-    displayDialogBox --yesno "Would you like to set up a work account?"
+    displayDialogBox --yesno "\nWould you like to set up a work account?"
     if [ $? -eq 1 ]; then
         sed -e "s/PERSONAL_NAME/$gitPersonalName/g" -e "s/PERSONAL_MAIL/$gitPersonalMail/g" ./templates/.gitconfig-notwork > ./dotfiles/.gitconfig
         return
     fi
 
-    gitWorkPath=$(displayDialogBox --inputbox "Enter an absolute folder path where you would like to use the work account." VALUES 3>&1 1>&2 2>&3)
+    gitWorkPath=$(displayDialogBox --inputbox "\nEnter an absolute folder path where you would like to use the work account." VALUES 3>&1 1>&2 2>&3)
     checkCancel "You must enter a path." && return
     mkdir -p "$gitWorkPath"
     while [[ ! -d $gitWorkPath ]]; do
-        gitWorkPath=$(displayDialogBox --inputbox "Path isn't valid. Please try again" VALUES 3>&1 1>&2 2>&3)
+        gitWorkPath=$(displayDialogBox --inputbox "\nPath isn't valid. Please try again." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a path." && return
         mkdir -p "$gitWorkPath"
     done
-    gitWorkName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+    gitWorkName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
     checkCancel "You must enter a name." && return
-    gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
+    gitWorkMail=$(displayDialogBox --inputbox "\nEnter an e-mail." VALUES 3>&1 1>&2 2>&3)
     checkCancel "You must enter an e-mail." && return
 
     while true; do
-        displayDialogBox --yesno "Please confirm that the data you entered is correct:\n\n - Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}" && break
-        gitWorkName=$(displayDialogBox --inputbox "Enter a name." VALUES 3>&1 1>&2 2>&3)
+        displayDialogBox --yesno "\nPlease confirm that the data you entered is correct:\n\n - Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}" && break
+        gitWorkName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a name." && return
-        gitWorkMail=$(displayDialogBox --inputbox "Enter an e-mail." VALUES 3>&1 1>&2 2>&3)
+        gitWorkMail=$(displayDialogBox --inputbox "\nEnter an e-mail." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter an e-mail." && return
     done
 
@@ -130,11 +130,11 @@ runUserScripts() {
 }
 
 startRice() {
-    displayDialogBox --title "sadedot" --msgbox "Hi! This script will auto install my dotfiles."
+    displayDialogBox --title "sadedot" --yesno "\nThis script will configure gitconfig, install the dotfiles, and then run the scripts of the '$(basename $PWD)/scripts' folder. Would you like to continue?"
     getGitconfigData
     source scripts/linkFiles.sh
     runUserScripts
-    displayDialogBox --title "sadedot" --msgbox "All done! Enjoy..."
+    displayDialogBox --title "sadedot" --msgbox "\nAll done! Enjoy..."
 }
 
 runScript() {
