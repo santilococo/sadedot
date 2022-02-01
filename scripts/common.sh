@@ -179,13 +179,13 @@ formatOptions() {
 useWhiptailMenu() {
     height=0; width=0
     formatOptions "$@"
-    whiptail "${options[@]}"
+    whiptail --notags "${options[@]}"
 }
 
 useDialogMenu() {
     height=9; width=60
     formatOptions "$@"
-    dialog "${options[@]}"
+    dialog --no-tags "${options[@]}"
 }
 
 calcWidthWhiptail() {
