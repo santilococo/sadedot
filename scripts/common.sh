@@ -76,8 +76,8 @@ useWhiptail() {
     fi
     width=$(calcWidthWhiptail "$str")
     height=$(calcHeightWhiptail "$str")
-    if [ $inputbox = true ]; then
-        width=$((width+15))
+    if [ $inputbox = true ] && [ $width -lt 30 ]; then
+        width=$((width+5))
     fi
     if [ $infobox = true ]; then
         height=$((height-1))
@@ -190,33 +190,26 @@ useDialogMenu() {
 
 calcWidthWhiptail() {
     width=$(echo "$1" | wc -c)
-    echo $((width+8))
+    [ $count -gt 60 ] && echo 60 || echo $((count+2))
 }
 
 calcWidthDialog() {
-    str=$1; count=1; found=false; option=1
-    for (( i = 0; i < ${#str}; i++ )); do
-        if [ "${str:$i:1}" = "\\" ] && [ "${str:$((i+1)):1}" = "n" ]; then
-            if [ $count -ge $option ]; then
-                option=$count
-            fi
+    count=1; found=false; option=1
+    while IFS= read -r -N 1 c; do
+        if [[ "$c" == $'\n' ]]; then
+            [ $count -ge $option ] && option=$count
             found=true
             count=-1
         fi
         ((count++))
-    done
-
-    if [ $found = false ]; then
-        echo $((count+8))
-    else
-        echo $option
-    fi
+    done < <(echo -ne "$1")
+    [ $option -ge "$count" ] && count=option
+    [ $count -gt 60 ] && echo 60 || echo $((count+4))
 }
 
 calcHeight() {
-    newlines=$(printf "$1" | grep -c $'\n')
-    chars=$(echo "$1" | wc -c)
-    height=$(echo "$chars" "$newlines" | awk '{
+    newlines=$(echo -ne "$1" | grep -c $'\n')
+    height=$(echo "${#1}" "$newlines" | awk '{
         x = (($1 - $2 + ($2 * 60)) / 60)
         printf "%d", (x == int(x)) ? x : int(x) + 1
     }')
