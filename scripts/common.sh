@@ -76,12 +76,8 @@ useWhiptail() {
     fi
     width=$(calcWidthWhiptail "$str")
     height=$(calcHeightWhiptail "$str")
-    if [ $inputbox = true ] && [ $width -lt 30 ]; then
-        width=$((width+5))
-    fi
-    if [ $infobox = true ]; then
-        height=$((height-1))
-    fi
+    [ $inputbox = true ] && [ $width -lt 30 ] && width=$((width+5))
+    [ $infobox = true ] && height=$((height-1))
     formatOptions "$@"
     if [ "$found" = false ]; then
         height=0; width=0
@@ -190,7 +186,7 @@ useDialogMenu() {
 
 calcWidthWhiptail() {
     width=$(echo "$1" | wc -c)
-    [ $count -gt 60 ] && echo 60 || echo $((count+2))
+    [ $count -gt 60 ] && echo 60 || echo $((width+2))
 }
 
 calcWidthDialog() {
