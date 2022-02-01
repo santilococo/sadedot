@@ -34,7 +34,7 @@ displayDialogBox() {
 }
 
 useDialog() {
-    str=$(getLastArgument "$@"); inputbox=false
+    str=$(getLastArgument "$@"); inputbox=false; passwordbox=false
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
@@ -43,12 +43,13 @@ useDialog() {
                 break
             fi
             [ "$item" = "--inputbox" ] && inputbox=true
+            [ "$item" = "--passwordbox" ] && passwordbox=true
             ((i++))
         done
     fi
     width=$(calcWidthDialog "$str")
     height=$(calcHeightDialog "$str")
-    if [ $inputbox = true ]; then
+    if [ $inputbox = true ] || [ $passwordbox = true ]; then
         width=$((width+15))
         height=$((height+2))
     fi
