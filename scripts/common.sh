@@ -190,7 +190,7 @@ useDialogMenu() {
 
 calcWidthWhiptail() {
     width=$(echo "$1" | wc -c)
-    [ $count -gt 60 ] && echo 60 || echo $((width+2))
+    [ $width -gt 60 ] && echo 60 || echo $((width+2))
 }
 
 calcWidthDialog() {
