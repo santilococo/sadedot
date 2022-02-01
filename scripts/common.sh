@@ -104,7 +104,9 @@ usePlainText() {
             --yesno) yesno=true ;;
         esac
     done
+    tput bold
     printf "${2:2}\n"
+    tput sgr0
     if [ $inputbox = true ]; then
         printLine && printf "\n"
         read -r readVar
@@ -133,7 +135,9 @@ usePlainText() {
 
 usePlainTextMenu() {
     clear
+    tput bold
     shift; printf "${1:2}\n"; shift; shift
+    tput sgr0
     local i=1; for item in "$@"; do
         echo "$item" | grep -qE '[0-9]+' && continue
         printf '%s\n' "$i) $item"
