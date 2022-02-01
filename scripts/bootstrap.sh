@@ -101,8 +101,8 @@ checkForDependencies() {
         [ ! -f "/etc/arch-release" ] && [ "$unameOutput" -ne 0 ] && return 1
         sudo pacman --noconfirm --needed -Sy "${1}"
         if [ $? -eq 1 ]; then
-            echo "Couldn't install ${1}." >&2
-            exit 1
+            echo "Couldn't install ${1}. We will continue without it."
+            return 1
         fi
     fi
 
