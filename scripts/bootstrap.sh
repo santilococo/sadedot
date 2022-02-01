@@ -96,7 +96,7 @@ checkForDependencies() {
     comm=$1 && [ "$1" = "libnewt" ] && comm=whiptail
 
     command -v "${comm}" &> /dev/null
-    if [ $? -eq 1 ]; then
+    if [ $? -ne 0 ]; then
         unameOutput=$(uname -a | grep "arch")
         [ ! -f "/etc/arch-release" ] && [ "$unameOutput" -ne 0 ] && return 1
         sudo pacman --noconfirm --needed -Sy "${1}"
