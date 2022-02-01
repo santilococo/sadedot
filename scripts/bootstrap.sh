@@ -94,19 +94,15 @@ getGitconfigData() {
 
 checkForDependencies() {
     comm=$1 && [ "$1" = "libnewt" ] && comm=whiptail
+    command -v "${comm}" &> /dev/null && return 0
 
-    command -v "${comm}" &> /dev/null
-    if [ $? -ne 0 ]; then
-        unameOutput=$(uname -a | grep "arch")
-        [ ! -f "/etc/arch-release" ] && [ "$unameOutput" -ne 0 ] && return 1
-        sudo pacman --noconfirm --needed -Sy "${1}"
-        if [ $? -eq 1 ]; then
-            echo "Couldn't install ${1}. We will continue without it."
-            return 1
-        fi
+    unameOutput=$(uname -a | grep -q "arch")
+    if [ -f "/etc/arch-release" ] || [ "$unameOutput" -ne 1 ]; then
+        sudo pacman --noconfirm --needed -Sy "${1}" && return 0
+        echo "Couldn't install ${1}. We will continue without it."
     fi
-
-    return 0
+    setDialogBox "plain"
+    return 1
 }
 
 runUserScripts() {
