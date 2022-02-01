@@ -204,7 +204,7 @@ calcWidthDialog() {
         ((count++))
     done < <(echo -ne "$1")
     [ $option -ge "$count" ] && count=option
-    [ $count -gt 60 ] && echo 60 || echo $((count+4))
+    [ $((count)) -gt 60 ] && echo 60 || echo $((count+4))
 }
 
 calcHeight() {
