@@ -54,7 +54,9 @@ getGitconfigData() {
     checkCancel "You must enter an e-mail." && return
 
     while true; do
-        displayDialogBox --yesno "\nPlease confirm that the data you entered is correct:\n\n - Name: ${gitPersonalName}\n - E-mail: ${gitPersonalMail}" && break
+        msg="\nPlease confirm that the data you entered is correct:\n\n -"
+        msg="${msg} Name: ${gitPersonalName}\n - E-mail: ${gitPersonalMail}"
+        displayDialogBox --yesno "$msg" && break
         gitPersonalName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a name." && return
         gitPersonalMail=$(displayDialogBox --inputbox "\nEnter an e-mail." VALUES 3>&1 1>&2 2>&3)
@@ -67,11 +69,13 @@ getGitconfigData() {
         return
     fi
 
-    gitWorkPath=$(displayDialogBox --inputbox "\nEnter an absolute folder path where you would like to use the work account." VALUES 3>&1 1>&2 2>&3)
+    msg="\nEnter an absolute folder path where you would like to use the work account."
+    gitWorkPath=$(displayDialogBox --inputbox "$msg" VALUES 3>&1 1>&2 2>&3)
     checkCancel "You must enter a path." && return
     mkdir -p "$gitWorkPath"
     while [[ ! -d $gitWorkPath ]]; do
-        gitWorkPath=$(displayDialogBox --inputbox "\nPath isn't valid. Please try again." VALUES 3>&1 1>&2 2>&3)
+        msg="\nPath isn't valid. Please try again."
+        gitWorkPath=$(displayDialogBox --inputbox "$msg" VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a path." && return
         mkdir -p "$gitWorkPath"
     done
@@ -81,7 +85,9 @@ getGitconfigData() {
     checkCancel "You must enter an e-mail." && return
 
     while true; do
-        displayDialogBox --yesno "\nPlease confirm that the data you entered is correct:\n\n - Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}" && break
+        msg="\nPlease confirm that the data you entered is correct:\n\n -"
+        msg="${msg} Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}"
+        displayDialogBox --yesno "$msg" && break
         gitWorkName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a name." && return
         gitWorkMail=$(displayDialogBox --inputbox "\nEnter an e-mail." VALUES 3>&1 1>&2 2>&3)
@@ -120,7 +126,9 @@ runUserScripts() {
 }
 
 startRice() {
-    displayDialogBox --title "sadedot" --yesno "\nThis script will configure gitconfig, install the dotfiles, and then run the scripts of the '$(basename $PWD)/scripts' folder. Would you like to continue?"
+    msg="\nThis script will configure gitconfig, install the dotfiles, and then run the scripts of"
+    msg="${msg} the '$(basename $PWD)/scripts' folder. Would you like to continue?"
+    displayDialogBox --title "sadedot" --yesno "$msg"
     getGitconfigData
     source scripts/linkFiles.sh
     runUserScripts
