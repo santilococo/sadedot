@@ -72,11 +72,13 @@ getGitconfigData() {
     msg="\nEnter an absolute folder path where you would like to use the work account."
     gitWorkPath=$(displayDialogBox --inputbox "$msg" VALUES 3>&1 1>&2 2>&3)
     checkCancel "You must enter a path." && return
+    gitWorkPath=$(echo "$gitWorkPath" | envsubst)
     mkdir -p "$gitWorkPath"
-    while [[ ! -d $gitWorkPath ]]; do
+    while [[ ! -d "$gitWorkPath" ]]; do
         msg="\nPath isn't valid. Please try again."
         gitWorkPath=$(displayDialogBox --inputbox "$msg" VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a path." && return
+        gitWorkPath=$(echo "$gitWorkPath" | envsubst)
         mkdir -p "$gitWorkPath"
     done
     gitWorkName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
