@@ -41,7 +41,7 @@ linkFile() {
             fi
         fi
     else
-        ln -s "$1" "$2"
+        ln -sf "$1" "$2"
     fi
 }
 
