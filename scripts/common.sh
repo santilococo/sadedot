@@ -230,7 +230,7 @@ calcHeightDialog() {
 
 checkCancel() {
     [ $? -eq 0 ] && return 1
-    displayDialogBox --msgbox "$1" VALUES
+    displayDialogBox --msgbox "\n$1" VALUES
     return 0
 }
 
