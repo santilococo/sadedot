@@ -1,7 +1,13 @@
  source scripts/common.sh
+# setDialogBox "whiptail"
+# term=ANSI
+# setDialogBox "plain"
+setDialogBox "dialog"
+displayDialogBox --infobox "\nUpdating sadedot submodule." VALUES
  
+ displayDialogBox --yesno "\nWould you like to set up gitconfig?" VALUES || return
  displayDialogBox --yesno "\nWould you like to set up gitconfig?" || return
- displayDialogBox --msgbox "\nNow, I will ask you for data to set up gitconfig personal account."
+ displayDialogBox --msgbox "\nNow, I will ask you for data to set up gitconfig personal account." VALUES
  gitPersonalName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
  gitPersonalMail=$(displayDialogBox --inputbox "\nEnter an e-mail." VALUES 3>&1 1>&2 2>&3)
      displayDialogBox --yesno "$msg" && break
