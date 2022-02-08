@@ -70,6 +70,6 @@ PRs are welcome.
 ## License <a name="license"></a>
 [MIT](https://raw.githubusercontent.com/santilococo/sadedot/master/LICENSE.md)
 
-[1]: https://github.com/santilococo/dotfiles/fork
-[2]: https://github.com/santilococo/dotfiles/tree/master/dotfiles/other
-[3]: https://github.com/santilococo/dotfiles
+[1]: https://github.com/santilococo/cdotfis/fork
+[2]: https://github.com/santilococo/cdotfis/tree/master/dotfiles/other
+[3]: https://github.com/santilococo/cdotfis
