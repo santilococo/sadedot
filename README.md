@@ -39,7 +39,7 @@ Also, for compatibility reasons, the script will choose not to use `dialog` or `
 
 Finally, you can run the script with `-l` if you want to print the log to the `sadedot.log` file (it will be created inside the `sadedot` folder).
 
-Note that you can add shell scripts to a folder named `scripts` (see [my repo][3]) if you want to run them when `scripts/bootstrap.sh` is run. By default, it will not run these scripts, so you must use the `-p` flag (they will run at the end of the script).
+Note that you can add shell scripts to a folder named `scripts` (see [my repo][3]) if you want to run them when `scripts/bootstrap.sh` is run. By default, it will not run these scripts, so you must use the `-p` flag (they will run at the end).
 
 As an example, I will show [my repo][3] directories in a tree-like format (note that the folder named `sadedot` is this repository as a submodule):
 ```
