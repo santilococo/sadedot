@@ -130,7 +130,7 @@ startRice() {
     msg="${msg} the '$(basename $PWD)/scripts' folder. Would you like to continue?"
     displayDialogBox --title "sadedot" --yesno "$msg"
     displayDialogBox --infobox "\nFirst, the sadedot submodule will be updated."
-    source scripts/update.sh
+    source scripts/update.sh | debug
     getGitconfigData
     source scripts/linkFiles.sh
     runUserScripts
