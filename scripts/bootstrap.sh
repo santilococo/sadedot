@@ -128,7 +128,7 @@ runUserScripts() {
 startRice() {
     msg="\nThis script will configure gitconfig, install the dotfiles"
     if [[ -n $userScriptsFlag && $userScriptsFlag = true ]]; then
-        msg="${msg}, and then run the scripts of the '$(basename $PWD)/scripts' folder"
+        msg="${msg}, and then run the scripts of the '$(basename "$PWD")/scripts' folder"
     fi
     msg="${msg}. Would you like to continue?"
     displayDialogBox --title "sadedot" --yesno "$msg" || return
@@ -145,7 +145,9 @@ runScript() {
     sadedotFolder=$(pwd -P | awk '{ sub(/sadedot.*/, "sadedot"); print }')
     cd "$sadedotFolder" || { echo "Couldn't cd into '$sadedotFolder'." 1>&2 && exit 1; }
 
-    [[ "$(basename $sadedotFolder)" != "sadedot" ]] && cd sadedot
+    if [[ "$(basename "$sadedotFolder")" != "sadedot" ]]; then
+        cd sadedot || { echo "Couldn't cd into 'sadedot'." 1>&2 && exit 1; }
+    fi
 
     source scripts/common.sh
     checkParameters "$@"

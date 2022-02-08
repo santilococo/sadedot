@@ -77,7 +77,7 @@ useWhiptail() {
     fi
     width=$(calcWidthWhiptail "$str")
     height=$(calcHeightWhiptail "$str")
-    [ $inputbox = true ] && [ $width -lt 30 ] && width=$((width+5))
+    [ $inputbox = true ] && [ "$width" -lt 30 ] && width=$((width+5))
     [ $infobox = true ] && height=$((height-1))
     formatOptions "$@"
     if [ "$found" = false ]; then
@@ -106,16 +106,16 @@ usePlainText() {
         esac
     done
     tput bold
-    printf "${2:2}\n"
+    printf '%s\n' "${2:2}"
     tput sgr0
     if [ $inputbox = true ]; then
         printLine && printf "\n"
         read -r readVar
-        printf "$readVar" 1>&2
+        printf '%s' "$readVar" 1>&2
     elif [ $passwordbox = true ]; then
         printLine && printf "\n"
         read -r -s readVar
-        printf "$readVar" 1>&2
+        printf '%s' "$readVar" 1>&2
     elif [ $yesno = true ]; then
         printLine
         printf '\n%s' "[y/n] "
@@ -137,7 +137,7 @@ usePlainText() {
 usePlainTextMenu() {
     clear
     tput bold
-    shift; printf "${1:2}\n"; shift; shift
+    shift; printf '%s\n' "${1:2}"; shift; shift
     tput sgr0
     local i=1; for item in "$@"; do
         echo "$item" | grep -qE '[0-9]+' && continue
@@ -154,7 +154,7 @@ usePlainTextMenu() {
         read -n 1 -r -s readVar
     done
     printf "\n"
-    printf "$readVar" 1>&2
+    printf '%s' "$readVar" 1>&2
 }
 
 getLastArgument() {
@@ -190,8 +190,8 @@ useDialogMenu() {
 }
 
 calcWidthWhiptail() {
-    width=$(echo "$1" | wc -c)
-    [ $width -gt 60 ] && echo 60 || echo $((width+2))
+    width=${#1}
+    [ "$width" -gt 60 ] && echo 60 || echo $((width+2))
 }
 
 calcWidthDialog() {
