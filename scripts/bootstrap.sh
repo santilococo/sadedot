@@ -88,7 +88,7 @@ getGitconfigData() {
 
     while true; do
         msg="\nPlease confirm that the data you entered is correct:\n\n -"
-        msg="${msg} Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}"
+        msg="${msg} Name: ${gitWorkName}\n - E-mail: ${gitWorkMail}\n - Path: ${gitWorkPath}"
         displayDialogBox --yesno "$msg" && break
         gitWorkName=$(displayDialogBox --inputbox "\nEnter a name." VALUES 3>&1 1>&2 2>&3)
         checkCancel "You must enter a name." && return
