@@ -136,7 +136,7 @@ startRice() {
     msg="${msg}. Would you like to continue?"
     displayDialogBox --title "sadedot" --yesno "$msg" || return
     displayDialogBox --infobox "\nUpdating sadedot submodule." VALUES
-    { cd ..; sh sadedot/scripts/update.sh 2>&1 | debug; }
+    ( cd ..; sh sadedot/scripts/update.sh 2>&1 | debug )
     getGitconfigData
     source scripts/linkFiles.sh
     runUserScripts
