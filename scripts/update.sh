@@ -9,7 +9,7 @@ updateSubmodules() {
 }
 
 runScript() {
-    lastFolder=$(pwd -P)
+    lastFolder=$PWD
     sadedotParentFolder=$(pwd -P | awk '{ sub(/\/sadedot.*/, ""); print }')
     cd "$sadedotParentFolder" || { echo "Couldn't cd into '$sadedotParentFolder'." 1>&2 && exit 1; }
 
