@@ -126,9 +126,12 @@ runUserScripts() {
 }
 
 startRice() {
-    msg="\nThis script will configure gitconfig, install the dotfiles, and then run the scripts of"
-    msg="${msg} the '$(basename $PWD)/scripts' folder. Would you like to continue?"
-    displayDialogBox --title "sadedot" --yesno "$msg"
+    msg="\nThis script will configure gitconfig, install the dotfiles"
+    if [[ -n $userScriptsFlag && $userScriptsFlag = true ]]; then
+        msg="${msg}, and then run the scripts of the '$(basename $PWD)/scripts' folder"
+    fi
+    msg="${msg}. Would you like to continue?"
+    displayDialogBox --title "sadedot" --yesno "$msg" || return
     displayDialogBox --infobox "\nFirst, the sadedot submodule will be updated."
     source scripts/update.sh | debug
     getGitconfigData
