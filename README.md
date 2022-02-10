@@ -58,7 +58,7 @@ You can install `libnewt` or `dialog` for a better experience, but they are not 
 
 ## Updating <a name="updating"></a>
 
-To keep the submodule up to date, you need to run
+To keep the submodule up to date, you need to run:
 
 ```bash
 git submodule foreach git pull
