@@ -5,7 +5,7 @@ Backup all your dotfiles (and easily deploy them on another machine).
 ## Table of contents
   - [Installation <a name="installation"></a>](#installation-)
   - [Usage <a name="usage"></a>](#usage-)
-  - [Optional dependencies <a name="optdependencies"></a>](#optdependencies-)
+  - [Optional dependencies <a name="optdependencies"></a>](#optionaldependencies-)
   - [Updating <a name="updating"></a>](#updating-)
   - [Contributing <a name="contributing"></a>](#contributing-)
   - [License <a name="license"></a>](#license-)
@@ -52,7 +52,7 @@ As an example, I will show [my repo][3] directories in a tree-like format (note 
     └── ...
 ```
 
-## Optional dependencies <a name="optdependencies"></a>
+## Optional dependencies <a name="optionaldependencies"></a>
 
 You can install `libnewt` or `dialog` for a better experience, but they are not required.
 
