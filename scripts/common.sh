@@ -210,25 +210,26 @@ calcWidthDialog() {
     [ $((count)) -gt 60 ] && echo 60 || echo $((count+4))
 }
 
-calcHeight() {
+calcHeightWhiptail() {
     newlines=$(echo -ne "$1" | grep -c $'\n')
-    width="$(($3-4))"
-    height=$(echo "$((${#1}-1))" "$((newlines-1))" "$width" | awk '{
+    height=$(echo "${#1}" "$newlines" | awk '{
+        x = (($1 - $2 + ($2 * 60)) / 60)
+        printf "%d", (x == int(x)) ? x : int(x) + 1
+    }')
+    echo $((6+height))
+}
+
+calcHeightDialog() {
+    newlines=$(echo -ne "$1" | grep -c $'\n')
+    strlen=$((${#1}-1))
+    width=$(($3-4))
+    height=$(echo "$strlen" "$((newlines-1))" "$width" | awk '{
         z = ($1 - $2) / $3
         y = (z == int(z)) ? int(z) : int(z) + 1
         n = ($2 / 1.3)
         x = y + ((n - int(n) < 0.5) ? int(n) : int(n) + 1)
         printf "%d", x
     }')
-}
-
-calcHeightWhiptail() {
-    calcHeight "$@"
-    echo $((6+height))
-}
-
-calcHeightDialog() {
-    calcHeight "$@"
     echo $((5+height))
 }
 
