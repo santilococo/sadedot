@@ -212,8 +212,6 @@ calcWidthDialog() {
 
 calcHeight() {
     newlines=$(echo -ne "$1" | grep -c $'\n')
-    # width="$3"
-    # [ $((width)) -lt 60 ] && width=$(($3-4))
     width="$(($3-4))"
     height=$(echo "$((${#1}-1))" "$((newlines-1))" "$width" | awk '{
         z = ($1 - $2) / $3
