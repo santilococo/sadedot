@@ -49,7 +49,7 @@ useDialog() {
         done
     fi
     width=$(calcWidthDialog "$str")
-    height=$(calcHeightDialog "$str")
+    height=$(calcHeightDialog "$str" "$width")
     if [ $inputbox = true ] || [ $passwordbox = true ]; then
         width=$((width+15))
         height=$((height+2))
@@ -212,9 +212,15 @@ calcWidthDialog() {
 
 calcHeight() {
     newlines=$(echo -ne "$1" | grep -c $'\n')
-    height=$(echo "${#1}" "$newlines" | awk '{
-        x = (($1 - $2 + ($2 * 60)) / 60)
-        printf "%d", (x == int(x)) ? x : int(x) + 1
+    # width="$3"
+    # [ $((width)) -lt 60 ] && width=$(($3-4))
+    width="$(($3-4))"
+    height=$(echo "$((${#1}-1))" "$((newlines-1))" "$width" | awk '{
+        z = ($1 - $2) / $3
+        y = (z == int(z)) ? int(z) : int(z) + 1
+        n = ($2 / 1.3)
+        x = y + ((n - int(n) < 0.5) ? int(n) : int(n) + 1)
+        printf "%d", x
     }')
 }
 
@@ -225,7 +231,7 @@ calcHeightWhiptail() {
 
 calcHeightDialog() {
     calcHeight "$@"
-    echo $((4+height))
+    echo $((5+height))
 }
 
 checkCancel() {
