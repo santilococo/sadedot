@@ -222,7 +222,7 @@ calcHeightWhiptail() {
 calcHeightDialog() {
     newlines=$(echo -ne "$1" | grep -c $'\n')
     strlen=$((${#1}-1))
-    width=$(($3-4))
+    width=$(($2-4))
     height=$(echo "$strlen" "$((newlines-1))" "$width" | awk '{
         z = ($1 - $2) / $3
         y = (z == int(z)) ? int(z) : int(z) + 1
