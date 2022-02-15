@@ -65,7 +65,9 @@ getGitconfigData() {
     
     displayDialogBox --yesno "\nWould you like to set up a work account?"
     if [ $? -eq 1 ]; then
-        sed -e "s/PERSONAL_NAME/$gitPersonalName/g" -e "s/PERSONAL_MAIL/$gitPersonalMail/g" ./templates/.gitconfig-notwork > ../dotfiles/.gitconfig
+        nameSubst="s/PERSONAL_NAME/$gitPersonalName/g"
+        mailSubst="s/PERSONAL_MAIL/$gitPersonalMail/g"
+        sed -e "$nameSubst" -e "$mailSubst" templates/.gitconfig-notwork > ../dotfiles/.gitconfig
         return
     fi
 
