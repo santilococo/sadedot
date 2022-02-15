@@ -81,9 +81,8 @@ loopThroughFiles() {
         msg="\nThere are 'other' files, would you like to install all of them"
         msg="${msg} or do you prefer to select which ones to install? Also, if"
         msg="${msg} you don't want to install them, you can press Cancel."
-        buttons=("--yes-label" " Install all " "--extra-button")
-        buttons+=("--extra-label" " Select which " "--no-label" " Cancel ")
-        displayDialogBox "${buttons[@]}" --yesno "$msg"
+        buttons=("--threebuttons" " Install all " " Select each " " Cancel ")
+        displayDialogBox "${buttons[@]}" --yesno "$msg" VALUES
         case $? in
             0) installAll=true ;;
             3) installAll=false ;;
