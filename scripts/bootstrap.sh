@@ -98,8 +98,13 @@ getGitconfigData() {
         checkCancel "You must enter an e-mail." && return
     done
 
-    sed -e "s/PERSONAL_NAME/$gitPersonalName/g" -e "s/PERSONAL_MAIL/$gitPersonalMail/g" -e "s|WORK_PATH|${gitWorkPath}|g" ./templates/.gitconfig > ../dotfiles/.gitconfig
-    sed -e "s/WORK_NAME/$gitWorkName/g" -e "s/WORK_MAIL/$gitWorkMail/g" ./templates/.gitconfig-work > ../dotfiles/.gitconfig-work
+    nameSubst="s/PERSONAL_NAME/$gitPersonalName/g"
+    mailSubst="s/PERSONAL_MAIL/$gitPersonalMail/g"
+    pathSubst="s|WORK_PATH|$gitWorkPath|g"
+    sed -e "$nameSubst" -e "$mailSubst" -e "$pathSubst" templates/.gitconfig > ../dotfiles/.gitconfig
+    nameSubst="s/WORK_NAME/$gitWorkName/g"
+    mailSubst="s/WORK_MAIL/$gitWorkMail/g"
+    sed -e "$nameSubst" -e "$mailSubst" templates/.gitconfig-work > ../dotfiles/.gitconfig-work
 }
 
 checkForDependencies() {
