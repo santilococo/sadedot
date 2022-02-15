@@ -34,17 +34,20 @@ displayDialogBox() {
 }
 
 useDialog() {
-    str=$(getLastArgument "$@"); inputbox=false; passwordbox=false; infobox=false
+    inputbox=false; passwordbox=false; infobox=false; threebuttons=false; yesno=false
+    str=$(getLastArgument "$@")
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
             if [ $i -eq $((argc-1)) ]; then
                 str="$item"
-                break
             fi
             [ "$item" = "--inputbox" ] && inputbox=true
             [ "$item" = "--passwordbox" ] && passwordbox=true
             [ "$item" = "--infobox" ] && infobox=true
+            [ "$item" = "--threebuttons" ] && threebuttons=true
+            [ "$item" = "--yesno" ] && yesno=true
+            [ "$yesno" = true ] && args+=("$item")
             ((i++))
         done
     fi
@@ -55,6 +58,9 @@ useDialog() {
         height=$((height+2))
     fi
     [ $infobox = true ] && height=$((height-2))
+    if [ "$threebuttons" = true ]; then
+        set -- --yes-label "$2" --extra-button --extra-label "$3" --no-label "$4" "${args[@]}"
+    fi
     formatOptions "$@"
     if [ "$found" = false ]; then
         dialog "$@" ${height} ${width}
@@ -64,16 +70,19 @@ useDialog() {
 }
 
 useWhiptail() {
-    str=$(getLastArgument "$@"); inputbox=false; infobox=false
+    inputbox=false; infobox=false; threebuttons=false; yesno=false
+    str=$(getLastArgument "$@")
     if [ "$str" = "VALUES" ]; then
         argc="$#"; i=1
         for item in "$@"; do
             if [ $i -eq $((argc-1)) ]; then
                 str="$item"
-                break
             fi
             [ "$item" = "--inputbox" ] && inputbox=true
             [ "$item" = "--infobox" ] && infobox=true
+            [ "$item" = "--threebuttons" ] && threebuttons=true
+            [ "$item" = "--yesno" ] && yesno=true
+            [ "$yesno" = true ] && args+=("$item")
             ((i++))
         done
     fi
@@ -81,12 +90,20 @@ useWhiptail() {
     height=$(calcHeightWhiptail "$str")
     [ $inputbox = true ] && [ "$width" -lt 30 ] && width=$((width+5))
     [ $infobox = true ] && height=$((height-1))
+    if [ "$threebuttons" = true ]; then
+        set -- --yes-button "$2" --no-button "$3" "${args[@]}"
+    fi
     formatOptions "$@"
     if [ "$found" = false ]; then
         height=0; width=0
         whiptail "$@" ${height} ${width}
     else
         whiptail "${options[@]}"
+        retVal=$?
+        if [ "$threebuttons" = true ]; then 
+            [ $retVal -eq 1 ] && return 3
+        fi
+        return $retVal
     fi
 }
 
