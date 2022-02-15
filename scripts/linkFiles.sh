@@ -78,18 +78,29 @@ loopThroughFiles() {
     done < <(find -H "$DOTFILES" -maxdepth 1 -mindepth 1 -type d -not -path '*other*' -print0)
 
     if [ -d "$DOTFILES/other" ]; then
-        files=""
-        while read -r -d '' item; do
-            item=$(echo "$item" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
-            files="${files}$item\n"
+        msg="\nThere are 'other' files, would you like to install all of them"
+        msg="${msg} or do you prefer to select which ones to install? Also, if"
+        msg="${msg} you don't want to install them, you can press Cancel."
+        buttons=("--yes-label" " Install all " "--extra-button")
+        buttons+=("--extra-label" " Select which " "--no-label" " Cancel ")
+        displayDialogBox "${buttons[@]}" --yesno "$msg"
+        case $? in
+            0) installAll=true ;;
+            3) installAll=false ;;
+            1) return ;;
+        esac
+        files=()
+        while read -r -d '' srcFile; do
+            file=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
+            msg="\nWould you like to install:\n\n'/$file'?"
+            [ "$installAll" = true ] || displayDialogBox --yesno "$msg" || continue
+            files+=("$srcFile")
         done < <(find -H "$DOTFILES/other" -mindepth 1 -type f -print0)
-        msg="\nThere are 'other' files, would you like to install them?\n\n${files}"
-        displayDialogBox --yesno "$msg" || return
     fi
 
     password=$(displayDialogBox --passwordbox "\nEnter your password." VALUES 3>&1 1>&2 2>&3)
     echo "$password" | sudo -S bash -c "" > /dev/null 2>&1
-    cmd="$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox"
+    cmd="$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox ${files[@]}"
     echo "$password" | sudo -S bash -c "$cmd"
     unset password
 }
@@ -102,20 +113,16 @@ runDetachedScript() {
     DOTFILES="$SADEDOT/dotfiles"
 
     local IFS=
-    while read -r -d '' srcFile; do
-        if [[ -d "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
-
-            if [[ ! -d "/$var" ]]; then
-                mkdir -p "/$var"
-            fi
+    shift; for srcFile in "$@"; do
+        var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
+        
+        varFolder=$(echo "$var" | sed "s/$(basename $var)//")
+        if [[ ! -d "/$varFolder" ]]; then
+            mkdir -p "/$var"
         fi
 
-        if [[ -f "$srcFile" ]]; then
-            var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
-            linkFile "$srcFile" "/$var"
-        fi
-    done < <(find -H "$DOTFILES/other" -mindepth 1 -print0)
+        linkFile "$srcFile" "/$var"
+    done
 }
 
 runScript() {
