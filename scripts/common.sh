@@ -4,9 +4,9 @@ displayDialogBox() {
     case $dialogBox in
         whiptail)
             if [ "$1" = "--menu" ]; then
-                useWhiptailMenu "$@"
+                useWhiptailListOrMenu "$@"
             elif [ "$1" = "--checklist" ]; then
-                useWhiptailList "$@"
+                useWhiptailListOrMenu "$@"
             else
                 if [ "$1" = "--infobox" ] && tty | grep -q "/dev/pts"; then
                     local TERM=ansi
@@ -16,9 +16,9 @@ displayDialogBox() {
             ;;
         dialog)
             if [ "$1" = "--menu" ]; then
-                useDialogMenu "$@"
+                useDialogListOrMenu "$@"
             elif [ "$1" = "--checklist" ]; then
-                useDialogList "$@"
+                useDialogListOrMenu "$@"
             else
                 useDialog "$@"
             fi
@@ -187,12 +187,13 @@ getLastArgument() {
 }
 
 formatOptions() {
-    options=(); found=false
-    # [ "$1" = "LIST" ] && list-height="$1"
+    options=(); found=false; isListOrMenu=false
+    [[ "$1" == "--checklist" || "$1" == "--menu" ]] && isListOrMenu=true
     for item in "$@"; do
         if [ "$item" = "VALUES" ]; then
             options+=("${height}")
             options+=("${width}")
+            [ $isListOrMenu = true ] && options+=("${listHeight}")
             found=true
             continue
         fi
@@ -201,20 +202,9 @@ formatOptions() {
     done
 }
 
-useWhiptailMenu() {
-    height=0; width=0
-    formatOptions "$@"
-    whiptail --notags "${options[@]}"
-}
-
-useDialogMenu() {
-    height=9; width=60
-    formatOptions "$@"
-    dialog --no-tags "${options[@]}"
-}
-
-getListOptions() {
-    maxLen=0; i=1; j=1; notFound=true; msgLen=-1; argsQty=0
+getListOrMenuOptions() {
+    maxLen=0; i=1; j=1; notFound=true; msgLen=-1; argsQty=0; isList=false
+    [ "$1" = "--checklist" ] && isList=true
     for item in "$@"; do
         [ "${item:0:2}" = "--" ] && continue
         [ $i -eq $j ] && [ $msgLen = -1 ] && msgLen=${#item}
@@ -228,32 +218,25 @@ getListOptions() {
             strLen=${#item}
             [ $strLen -gt $maxLen ] && maxLen=$strLen
             ((argsQty++))
+            [ $isList = false ] && ((j++))
         fi
         ((j++))
     done
-    maxLen=$((maxLen+15)) && [ "$maxLen" -ge "$msgLen" ] || maxLen=$msgLen
-    argsQty=$((argsQty+8)) && [ "$argsQty" -le 20 ] || argsQty=20
-    listHeight=$((argsQty-8)) && [ "$argsQty" -ge 10 ] || listHeight=$((argsQty-8))
-    options=(); found=false
-    for item in "$@"; do
-        if [ "$item" = "VALUES" ]; then
-            options+=("${argsQty}")
-            options+=("${maxLen}")
-            options+=("${listHeight}")
-            found=true
-            continue
-        fi
-        options+=("${item}")
-    done
+    maxLen=$((maxLen+15)) && [ "$maxLen" -ge "$msgLen" ] || maxLen=$((msgLen+3))
+    [ "$dialogBox" = "whiptail" ] && heightOffset=9 || heightOffset=8
+    argsQty=$((argsQty+heightOffset)) && [ "$argsQty" -le 20 ] || argsQty=20
+    listHeight=$((argsQty-heightOffset)) && [ "$argsQty" -ge 10 ] || listHeight=$((argsQty-heightOffset))
+    height=$argsQty; width=$maxLen
+    formatOptions "$@"
 }
 
-useDialogList() {
-    getListOptions "$@"
+useDialogListOrMenu() {
+    getListOrMenuOptions "$@"
     dialog --no-tags "${options[@]}"
 }
 
-useWhiptailList() {
-    getListOptions "$@"
+useWhiptailListOrMenu() {
+    getListOrMenuOptions "$@"
     whiptail --notags --separate-output "${options[@]}"
 }
 
