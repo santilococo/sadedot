@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
-skip_all=false
-overwrite_all=false
-backup_all=false
-
 linkFile() {
     if [[ -f "$2" ]]; then
-        if [ "$skip_all" == "true" ]; then
+        if [ "$skipAll" == "true" ]; then
             return
-        elif [ "$overwrite_all" == "true" ]; then
+        elif [ "$overwriteAll" == "true" ]; then
             ln -sf "$1" "$2"
-        elif [ "$backup_all" == "true" ]; then
+        elif [ "$backupAll" == "true" ]; then
             mv "$2" "${2}.backup"
             ln -s "$1" "$2"
         else
@@ -24,18 +20,18 @@ linkFile() {
             if [ "$selectedOption" -eq 1 ]; then
                 return
             elif [ "$selectedOption" -eq 2 ]; then
-                skip_all=true
+                skipAll=true
                 return
             elif [ "$selectedOption" -eq 3 ]; then
                 ln -sf "$1" "$2"
             elif [ "$selectedOption" -eq 4 ]; then
-                overwrite_all=true
+                overwriteAll=true
                 ln -sf "$1" "$2"
             elif [ "$selectedOption" -eq 5 ]; then
                 mv "$2" "${2}.backup"
                 ln -s "$1" "$2"
             else
-                backup_all=true
+                backupAll=true
                 mv "$2" "${2}.backup"
                 ln -s "$1" "$2"
             fi
@@ -46,6 +42,7 @@ linkFile() {
 }
 
 loopThroughFiles() {
+    skipAll=false; overwriteAll=false; backupAll=false
     SADEDOT=$(pwd -P)
     DOTFILES="$SADEDOT/dotfiles"
 
