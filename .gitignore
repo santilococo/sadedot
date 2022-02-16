@@ -1,3 +1,5 @@
 .shellcheckrc
 shellcheck
 sadedot.log
+dialog.sh
+
