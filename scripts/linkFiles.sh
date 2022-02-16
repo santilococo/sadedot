@@ -14,7 +14,7 @@ linkFile() {
             mv "$2" "${2}.backup"
             ln -s "$1" "$2"
         else
-            msg="\nFile already exists: $(basename "$1"), what would you like to do?"
+            msg="\nFile already exists: '${1//$HOME\//}', what would you like to do?"
             options=(1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all")
             selectedOption=$(displayDialogBox --menu "$msg" VALUES 0 "${options[@]}" 3>&1 1>&2 2>&3)
             if [ $? -eq 1 ]; then
