@@ -10,6 +10,8 @@ linkFile() {
             mv "$2" "${2}.backup"
             ln -s "$1" "$2"
         else
+            [ -h "$2" ] && [ "$1" = $(realpath "$2") ] && continue
+
             msg="\nFile already exists: '${2//$HOME\//}', what would you like to do?"
             options=(1 "Skip" 2 "Skip all" 3 "Overwrite" 4 "Overwrite all" 5 "Backup" 6 "Backup all")
             selectedOption=$(displayDialogBox --menu "$msg" VALUES 0 "${options[@]}" 3>&1 1>&2 2>&3)
