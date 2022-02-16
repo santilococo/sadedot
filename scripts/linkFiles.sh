@@ -101,7 +101,7 @@ loopThroughFiles() {
         fi
     fi
 
-    password=$(displayDialogBox --passwordbox "\nEnter your password." VALUES 3>&1 1>&2 2>&3)
+    password=$(displayDialogBox --passwordbox "\nEnter your (sudo) password." VALUES 3>&1 1>&2 2>&3)
     echo "$password" | sudo -S bash -c "" > /dev/null 2>&1
     cmd="$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox ${files[*]}"
     echo "$password" | sudo -S bash -c "$cmd"
