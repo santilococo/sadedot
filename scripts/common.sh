@@ -188,7 +188,7 @@ formatOptions() {
 }
 
 getListOrMenuOptions() {
-    maxLen=0; i=1; j=1; notFound=true; msgLen=-1; argsQty=0; isList=false
+    maxLen=0; i=1; j=1; notFound=true; msgLen=-1; argsQty=0; isList=false; height=0
     [ "$1" = "--checklist" ] && isList=true
     for item in "$@"; do
         [ "${item:0:2}" = "--" ] && continue
@@ -207,11 +207,18 @@ getListOrMenuOptions() {
         fi
         ((j++))
     done
+    if [ "$msgLen" -gt 52 ]; then
+        height=$(echo "$msgLen" | awk '{
+            x = $1 / 57
+            printf "%d", (x == int(x)) ? x : int(x) + 1 
+        }')
+        msgLen=52
+    fi
     maxLen=$((maxLen+15)) && [ "$maxLen" -ge "$msgLen" ] || maxLen=$((msgLen+3))
     [ "$dialogBox" = "whiptail" ] && heightOffset=9 || heightOffset=8
     argsQty=$((argsQty+heightOffset)) && [ "$argsQty" -le 20 ] || argsQty=20
     listHeight=$((argsQty-heightOffset)) && [ "$argsQty" -ge 10 ] || listHeight=$((argsQty-heightOffset))
-    height=$argsQty; width=$maxLen
+    height=$((argsQty+height)); width=$maxLen
     formatOptions "$@"
 }
 
