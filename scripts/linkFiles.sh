@@ -95,6 +95,7 @@ loopThroughFiles() {
 
         msg="\nSelect the files that you want to install."
         files=("$(displayDialogBox --checklist "$msg" VALUES "${files[@]}" 3>&1 1>&2 2>&3)")
+        files=(${files[@]//$'\n'/ })
     fi
 
     password=$(displayDialogBox --passwordbox "\nEnter your password." VALUES 3>&1 1>&2 2>&3)
