@@ -115,7 +115,7 @@ runDetachedScript() {
     shift; for srcFile in "$@"; do
         var=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
         
-        varFolder=$(echo "$var" | sed "s/$(basename $var)//")
+        varFolder=${var//\/$(basename "$var")/}
         if [[ ! -d "/$varFolder" ]]; then
             mkdir -p "/$var"
         fi
