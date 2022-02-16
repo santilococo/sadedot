@@ -93,13 +93,13 @@ loopThroughFiles() {
             file=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
             msg="\nWould you like to install:\n\n'/$file'?"
             [ "$installAll" = true ] || displayDialogBox --yesno "$msg" || continue
-            files+=("$srcFile")
+            files+=("$srcFile" " ")
         done < <(find -H "$DOTFILES/other" -mindepth 1 -type f -print0)
     fi
 
     password=$(displayDialogBox --passwordbox "\nEnter your password." VALUES 3>&1 1>&2 2>&3)
     echo "$password" | sudo -S bash -c "" > /dev/null 2>&1
-    cmd="$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox ${files[@]}"
+    cmd="$(declare -f runDetachedScript); $(declare -f linkFile); runDetachedScript getDialogBox ${files[*]}"
     echo "$password" | sudo -S bash -c "$cmd"
     unset password
 }
