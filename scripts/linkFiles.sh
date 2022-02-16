@@ -90,10 +90,11 @@ loopThroughFiles() {
         files=()
         while read -r -d '' srcFile; do
             file=$(echo "$srcFile" | awk '{ sub(/.*dotfiles\/other\//, ""); print }')
-            msg="\nWould you like to install:\n\n'/$file'?"
-            [ "$installAll" = true ] || displayDialogBox --yesno "$msg" || continue
-            files+=("$srcFile" " ")
+            files+=("$srcFile" "$file" "OFF")
         done < <(find -H "$DOTFILES/other" -mindepth 1 -type f -print0)
+
+        msg="\nSelect the files that you want to install."
+        files=("$(displayDialogBox --checklist "$msg" VALUES "${files[@]}" 3>&1 1>&2 2>&3)")
     fi
 
     password=$(displayDialogBox --passwordbox "\nEnter your password." VALUES 3>&1 1>&2 2>&3)
