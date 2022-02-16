@@ -2,36 +2,18 @@
 
 displayDialogBox() {
     case $dialogBox in
-        whiptail)
-            if [[ "$1" == "--checklist" || "$1" == "--menu" ]]; then
-                useWhiptailListOrMenu "$@"
-            else
-                [ "$1" = "--infobox" ] && tty | grep -q "/dev/pts" && local TERM=ansi
-                useWhiptail "$@"
-            fi
-            ;;
-        dialog)
-            if [[ "$1" == "--checklist" || "$1" == "--menu" ]]; then
-                useDialogListOrMenu "$@"
-            else
-                useDialog "$@"
-            fi
-            ;;
-        plain)
-            if [ "$1" = "--menu" ]; then
-                usePlainTextMenu "$@"
-            else
-                usePlainText "$@"
-            fi
-            ;;
-        ?)
-            echo "Unknown dialogBox variable" >&2
-            exit 1
-            ;;
+        whiptail) useWhiptail "$@" ;;
+        dialog) useDialog "$@" ;;
+        plain) usePlainText "$@" ;;
+        ?) echo "Unknown dialogBox variable" >&2 && exit 1 ;;
     esac
 }
 
 useDialog() {
+    if [[ "$1" == "--checklist" || "$1" == "--menu" ]]; then
+        useDialogListOrMenu "$@"
+        exit
+    fi
     inputbox=false; passwordbox=false; infobox=false; threebuttons=false; yesno=false
     str=$(getLastArgument "$@")
     if [ "$str" = "VALUES" ]; then
@@ -68,6 +50,11 @@ useDialog() {
 }
 
 useWhiptail() {
+    if [[ "$1" == "--checklist" || "$1" == "--menu" ]]; then
+        useWhiptailListOrMenu "$@"
+        exit
+    fi
+    [ "$1" = "--infobox" ] && tty | grep -q "/dev/pts" && local TERM=ansi
     inputbox=false; infobox=false; threebuttons=false; yesno=false
     str=$(getLastArgument "$@")
     if [ "$str" = "VALUES" ]; then
@@ -110,6 +97,10 @@ printLine() {
 }
 
 usePlainText() {
+    if [ "$1" = "--menu" ]; then
+        usePlainTextMenu "$@"
+        exit
+    fi
     clear
     inputbox=false; infobox=false; msgbox=false; passwordbox=false; yesno=false
     for item in "$@"; do
