@@ -205,12 +205,12 @@ getListOrMenuOptions() {
         if [ $notFound = true ]; then
             [[ "${item}" == "VALUES" ]] && ((i+=3))
             [[ "${item}" == +([0-9]) ]] && ((i++))
-            [ $i -le 3 ] && continue
+            [ "$i" -le 3 ] && continue
         fi
         notFound=false
         if [ $((j % 3)) -eq 0 ]; then
             strLen=${#item}
-            [ $strLen -gt $maxLen ] && maxLen=$strLen
+            [ "$strLen" -gt $maxLen ] && maxLen=$strLen
             ((argsQty++))
             [ $isList = false ] && ((j++))
         fi
