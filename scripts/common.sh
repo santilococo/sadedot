@@ -3,21 +3,15 @@
 displayDialogBox() {
     case $dialogBox in
         whiptail)
-            if [ "$1" = "--menu" ]; then
-                useWhiptailListOrMenu "$@"
-            elif [ "$1" = "--checklist" ]; then
+            if [[ "$1" == "--checklist" || "$1" == "--menu" ]]; then
                 useWhiptailListOrMenu "$@"
             else
-                if [ "$1" = "--infobox" ] && tty | grep -q "/dev/pts"; then
-                    local TERM=ansi
-                fi
+                [ "$1" = "--infobox" ] && tty | grep -q "/dev/pts" && local TERM=ansi
                 useWhiptail "$@"
             fi
             ;;
         dialog)
-            if [ "$1" = "--menu" ]; then
-                useDialogListOrMenu "$@"
-            elif [ "$1" = "--checklist" ]; then
+            if [[ "$1" == "--checklist" || "$1" == "--menu" ]]; then
                 useDialogListOrMenu "$@"
             else
                 useDialog "$@"
