@@ -5,6 +5,8 @@ displayDialogBox() {
         whiptail)
             if [ "$1" = "--menu" ]; then
                 useWhiptailMenu "$@"
+            elif [ "$1" = "--checklist" ]; then
+                useWhiptailList "$@"
             else
                 if [ "$1" = "--infobox" ] && tty | grep -q "/dev/pts"; then
                     local TERM=ansi
@@ -15,6 +17,8 @@ displayDialogBox() {
         dialog)
             if [ "$1" = "--menu" ]; then
                 useDialogMenu "$@"
+            elif [ "$1" = "--checklist" ]; then
+                useDialogList "$@"
             else
                 useDialog "$@"
             fi
@@ -184,6 +188,7 @@ getLastArgument() {
 
 formatOptions() {
     options=(); found=false
+    # [ "$1" = "LIST" ] && list-height="$1"
     for item in "$@"; do
         if [ "$item" = "VALUES" ]; then
             options+=("${height}")
@@ -206,6 +211,50 @@ useDialogMenu() {
     height=9; width=60
     formatOptions "$@"
     dialog --no-tags "${options[@]}"
+}
+
+getListOptions() {
+    maxLen=0; i=1; j=1; notFound=true; msgLen=-1; argsQty=0
+    for item in "$@"; do
+        [ "${item:0:2}" = "--" ] && continue
+        [ $i -eq $j ] && [ $msgLen = -1 ] && msgLen=${#item}
+        if [ $notFound = true ]; then
+            [[ "${item}" == "VALUES" ]] && ((i+=3))
+            [[ "${item}" == +([0-9]) ]] && ((i++))
+            [ $i -le 3 ] && continue
+        fi
+        notFound=false
+        if [ $((j % 3)) -eq 0 ]; then
+            strLen=${#item}
+            [ $strLen -gt $maxLen ] && maxLen=$strLen
+            ((argsQty++))
+        fi
+        ((j++))
+    done
+    maxLen=$((maxLen+15)) && [ "$maxLen" -ge "$msgLen" ] || maxLen=$msgLen
+    argsQty=$((argsQty+8)) && [ "$argsQty" -le 20 ] || argsQty=20
+    listHeight=$((argsQty-8)) && [ "$argsQty" -ge 10 ] || listHeight=$((argsQty-8))
+    options=(); found=false
+    for item in "$@"; do
+        if [ "$item" = "VALUES" ]; then
+            options+=("${argsQty}")
+            options+=("${maxLen}")
+            options+=("${listHeight}")
+            found=true
+            continue
+        fi
+        options+=("${item}")
+    done
+}
+
+useDialogList() {
+    getListOptions "$@"
+    dialog --no-tags "${options[@]}"
+}
+
+useWhiptailList() {
+    getListOptions "$@"
+    whiptail --notags --separate-output "${options[@]}"
 }
 
 calcWidthWhiptail() {
