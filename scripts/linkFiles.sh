@@ -78,14 +78,13 @@ loopThroughFiles() {
 
     if [ -d "$DOTFILES/other" ]; then
         msg="\nThere are 'other' files, would you like to install all of them"
-        msg="${msg} or do you prefer to select which ones to install? Also, if"
-        msg="${msg} you don't want to install them, you can press Cancel."
-        buttons=("--threebuttons" " Install all " " Select each " " Cancel ")
-        displayDialogBox "${buttons[@]}" --yesno "$msg" VALUES
-        case $? in
-            0) installAll=true ;;
-            3) installAll=false ;;
-            1) return ;;
+        msg="${msg} or do you prefer to select which ones to install?"
+        options=(1 "Install all" 2 "Select each")
+        selectedOption=$(displayDialogBox --menu "$msg" VALUES "${options[@]}" 3>&1 1>&2 2>&3)
+        [ $? -eq 1 ] && return
+        case $selectedOption in
+            1) installAll=true ;;
+            2) installAll=false ;;
         esac
         files=()
         while read -r -d '' srcFile; do
