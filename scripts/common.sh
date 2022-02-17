@@ -82,7 +82,7 @@ printLine() {
 printHelp() {
     tput bold
     tput setaf 3
-    printf '\n\n%s' "$1"
+    echo -ne "\n\n$1"
     tput sgr0
     printf '\n%s' "----------------------------------------"
 }
@@ -176,6 +176,7 @@ usePlainTextList() {
 
     helpmsg="To select an element you must enter its number."
     helpmsg="${helpmsg} Also, you can deselect an item by re-entering its number."
+    helpmsg="${helpmsg}\nTo finalize the selection press ENTER."
     printHelp "$helpmsg"
     printf '\n%s' "[1..$j] "
     isNewline=false
@@ -198,10 +199,10 @@ usePlainTextList() {
             if [ $((i%3)) -eq 0 ]; then
                 printf '%s\n' "${selectedOptions[@]}" | grep -Fxq "${options[$j]}"
                 retVal=$?
-                if [ $((++j)) -eq $readVar ] && [ $retVal -eq 0 ]; then
-                    selectedOptions=(${selectedOptions[@]//${options[$((readVar-1))]}/})
+                if [ $((++j)) -eq "$readVar" ] && [ $retVal -eq 0 ]; then
+                    IFS=' ' read -r -a selectedOptions <<< "${selectedOptions[@]//${options[$((readVar-1))]}/}"
                     printf '%s\n' "$j) $item"
-                elif [ $j -eq $readVar ] || [ $retVal -eq 0 ]; then
+                elif [ "$j" -eq "$readVar" ] || [ $retVal -eq 0 ]; then
                     tput setab 2
                     printf '%s\n' "$j) $item"
                     [ $retVal -ne 0 ] && selectedOptions+=("${options[$((readVar-1))]}")
