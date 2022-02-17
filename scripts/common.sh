@@ -79,6 +79,14 @@ printLine() {
     printf '\n\n%s' "----------------------------------------"
 }
 
+printHelp() {
+    tput bold
+    tput setaf 3
+    printf '\n\n%s' "$1"
+    tput sgr0
+    printf '\n%s' "----------------------------------------"
+}
+
 usePlainText() {
     if [ "$1" = "--menu" ]; then
         usePlainTextMenu "$@"
@@ -154,11 +162,7 @@ usePlainTextMenu() {
 usePlainTextList() {
     clear
     tput bold
-    shift
-    msg="${1:2} To select an element you must enter its number"
-    msg="${msg} (which appears to the left of the element)."
-    msg="${msg} Also, you can deselect an item by re-entering its number."
-    printf '%s\n' "$msg"; shift; shift
+    shift; msg="${1:2}"; printf '%s\n' "$msg"; shift; shift
     tput sgr0
     options=()
     local i=2; j=0; for item in "$@"; do
@@ -170,7 +174,9 @@ usePlainTextList() {
         ((i++))
     done
 
-    printLine
+    helpmsg="To select an element you must enter its number."
+    helpmsg="${helpmsg} Also, you can deselect an item by re-entering its number."
+    printHelp "$helpmsg"
     printf '\n%s' "[1..$j] "
     isNewline=false
     selectedOptions=()
@@ -206,7 +212,8 @@ usePlainTextList() {
             fi
             ((i++))
         done
-        printLine
+        # printLine
+        printHelp "$helpmsg"
         printf '\n%s' "[1..$j] "
     done
     printf "\n"
