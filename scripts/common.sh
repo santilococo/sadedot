@@ -154,7 +154,11 @@ usePlainTextMenu() {
 usePlainTextList() {
     clear
     tput bold
-    shift; msg=${1:2}; printf '%s\n' "$msg"; shift; shift
+    shift
+    msg="${1:2} To select an element you must enter its number"
+    msg="${msg} (which appears to the left of the element)."
+    msg="${msg} Also, you can deselect an item by re-entering its number."
+    printf '%s\n' "$msg"; shift; shift
     tput sgr0
     options=()
     local i=2; j=0; for item in "$@"; do
@@ -188,7 +192,10 @@ usePlainTextList() {
             if [ $((i%3)) -eq 0 ]; then
                 printf '%s\n' "${selectedOptions[@]}" | grep -Fxq "${options[$j]}"
                 retVal=$?
-                if [ $((++j)) -eq $readVar ] || [ $retVal -eq 0 ]; then
+                if [ $((++j)) -eq $readVar ] && [ $retVal -eq 0 ]; then
+                    selectedOptions=(${selectedOptions[@]//${options[$((readVar-1))]}/})
+                    printf '%s\n' "$j) $item"
+                elif [ $j -eq $readVar ] || [ $retVal -eq 0 ]; then
                     tput setab 2
                     printf '%s\n' "$j) $item"
                     [ $retVal -ne 0 ] && selectedOptions+=("${options[$((readVar-1))]}")
