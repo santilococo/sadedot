@@ -83,6 +83,9 @@ usePlainText() {
     if [ "$1" = "--menu" ]; then
         usePlainTextMenu "$@"
         exit
+    elif [ "$1" == "--checklist" ]; then
+        usePlainTextList "$@"
+        exit
     fi
     clear
     inputbox=false; infobox=false; msgbox=false; passwordbox=false; yesno=false
@@ -146,6 +149,64 @@ usePlainTextMenu() {
     done
     printf "\n"
     printf '%s' "$readVar" 1>&2
+}
+
+usePlainTextList() {
+    clear
+    tput bold
+    shift; msg=${1:2}; printf '%s\n' "$msg"; shift; shift
+    tput sgr0
+    options=()
+    local i=2; j=0; for item in "$@"; do
+        if [ $((i%3)) -eq 0 ]; then
+            printf '%s\n' "$((++j))) $item"
+        else
+            [[ "$item" != "OFF" && "$item" != "ON" ]] && options+=("$item")
+        fi
+        ((i++))
+    done
+
+    printLine
+    printf '\n%s' "[1..$j] "
+    isNewline=false
+    selectedOptions=()
+    while [ $isNewline = false ]; do
+        read -n ${#j} -r readVar
+        while echo "$readVar" | grep -vqE '[0-9]+' || [[ $readVar -le 0 || $readVar -gt $j ]]; do
+            [ "${#readVar}" -eq 0 ] && isNewline=true && break
+            printf "\033[A"
+            printf '\n%s' "You need to choose a number between 1 and $j)"
+            printf '\n%s' "[1..$j] "
+            read -n 1 -r -s readVar
+        done
+        [ $isNewline = true ] && break
+        clear
+        tput bold
+        printf '%s\n' "$msg"
+        tput sgr0
+        local i=2; j=0; for item in "$@"; do
+            if [ $((i%3)) -eq 0 ]; then
+                printf '%s\n' "${selectedOptions[@]}" | grep -Fxq "${options[$j]}"
+                retVal=$?
+                if [ $((++j)) -eq $readVar ] || [ $retVal -eq 0 ]; then
+                    tput setab 2
+                    printf '%s\n' "$j) $item"
+                    [ $retVal -ne 0 ] && selectedOptions+=("${options[$((readVar-1))]}")
+                    tput sgr0
+                else
+                    printf '%s\n' "$j) $item"
+                fi
+            fi
+            ((i++))
+        done
+        printLine
+        printf '\n%s' "[1..$j] "
+    done
+    printf "\n"
+
+    if [ ${#selectedOptions[@]} -gt 0 ]; then
+        echo "${selectedOptions[@]}"
+    fi
 }
 
 getLastArgument() {
