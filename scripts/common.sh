@@ -212,7 +212,6 @@ usePlainTextList() {
             fi
             ((i++))
         done
-        # printLine
         printHelp "$helpmsg"
         printf '\n%s' "[1..$j] "
     done
