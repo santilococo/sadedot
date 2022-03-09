@@ -54,7 +54,7 @@ As an example, I will show [my repo][3] directories in a tree-like format (note 
 
 ## Optional dependencies <a name="optionaldependencies"></a>
 
-You can install `libnewt` or `dialog` for a better experience, but they are not required.
+You can install `dialog` (recommended) or `libnewt` for a better experience, but they are not required.
 
 ## Updating <a name="updating"></a>
 
